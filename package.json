@@ -1,0 +1,104 @@
+{
+  "name": "react-easy-sort",
+  "version": "0.0.0",
+  "description": "A React component to sort items in lists or grids",
+  "homepage": "https://ricardo-ch.github.io/react-easy-sort/",
+  "keywords": [
+    "react",
+    "sort",
+    "sortable",
+    "sortable grid",
+    "sortable list"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ricardo-ch/react-easy-sort"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "author": "Ricardo.ch",
+  "license": "MIT",
+  "sideEffects": false,
+  "scripts": {
+    "start": "webpack-dev-server --mode development",
+    "version": "yarn && yarn build",
+    "build": "yarn-or-npm bili && yarn-or-npm build:copy-files",
+    "test": "yarn-or-npm unit && yarn-or-npm lint && yarn-or-npm lint:ts",
+    "unit": "jest src",
+    "unit:watch": "jest --watchAll src",
+    "lint": "eslint --ext .ts,.tsx ./examples ./src",
+    "lint:ts": "tsc --noEmit",
+    "prebuild": "rimraf dist",
+    "build:copy-files": "babel-node ./scripts/copy-build-files.js",
+    "prepublishOnly": "yarn-or-npm build",
+    "precommit": "lint-staged",
+    "format": "prettier --write src/**/*.ts*",
+    "npm:publish": "np --contents=dist"
+  },
+  "peerDependencies": {
+    "react": ">=16.4.0",
+    "react-dom": ">=16.4.0"
+  },
+  "dependencies": {
+    "array-move": "^3.0.1",
+    "tslib": "2.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/node": "^7.7.7",
+    "@babel/plugin-proposal-class-properties": "^7.3.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/preset-react": "^7.0.0",
+    "@types/jest": "^26.0.14",
+    "@types/react": "^16.9.17",
+    "@types/react-dom": "^16.9.4",
+    "@typescript-eslint/eslint-plugin": "4.2.0",
+    "@typescript-eslint/parser": "4.2.0",
+    "all-contributors-cli": "^6.4.0",
+    "babel-eslint": "10.x",
+    "babel-loader": "^8.0.5",
+    "bili": "^5.0.5",
+    "copy-webpack-plugin": "^6.1.1",
+    "css-loader": "^4.3.0",
+    "eslint": "7.9.0",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-config-react-app": "^5.1.0",
+    "eslint-plugin-flowtype": "5.2.0",
+    "eslint-plugin-import": "2.x",
+    "eslint-plugin-jsx-a11y": "6.x",
+    "eslint-plugin-react": "7.x",
+    "eslint-plugin-react-hooks": "4.1.2",
+    "html-webpack-plugin": "^4.5.0",
+    "husky": "^4.3.0",
+    "jest": "26.4.2",
+    "lint-staged": "^10.4.0",
+    "np": "^6.5.0",
+    "prettier": "^2.1.2",
+    "query-string": "^6.1.0",
+    "raw-loader": "^4.0.1",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "rimraf": "^3.0.0",
+    "rollup-plugin-typescript2": "^0.27.1",
+    "start-server-and-test": "^1.4.1",
+    "style-loader": "^1.2.1",
+    "ts-jest": "^26.4.0",
+    "ts-loader": "^8.0.4",
+    "typescript": "^4.0.3",
+    "webpack": "^4.41.4",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.11.0",
+    "yarn-or-npm": "^3.0.1"
+  },
+  "lint-staged": {
+    "*.+(ts|tsx|js|css)": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "jest": {
+    "preset": "ts-jest"
+  }
+}

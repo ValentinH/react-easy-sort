@@ -1,0 +1,10 @@
+node_modules
+dist
+
+docs/.cache
+docs/public
+.idea
+*.iml
+.yalc
+yalc.lock
+yarn-error.log

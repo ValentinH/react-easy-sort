@@ -1,0 +1,4 @@
+docs/.cache
+dist
+.yalc
+webpack.config.js

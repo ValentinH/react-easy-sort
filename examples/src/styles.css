@@ -1,0 +1,33 @@
+body {
+  margin: 0;
+  padding: 32px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.list {
+  user-select: none;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-gap: 16px;
+}
+
+.item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(84, 84, 241);
+  color: white;
+  height: 150px;
+  cursor: grab;
+  font-size: 20px;
+  user-select: none;
+}
+
+.dragged {
+  background-color: rgb(37, 37, 197);
+}
+@media (min-width: 600px) {
+  .list {
+    grid-gap: 24px;
+  }
+}
