@@ -4,6 +4,14 @@ A React component to sort items in lists or grids
 
 ![react-easy-sort-demo](https://user-images.githubusercontent.com/2678610/107010948-4a58fa80-6797-11eb-95f8-bc7d3abbdc96.gif)
 
+The goal of this component is to allow sorting elements with drag and drop.
+
+It is mobile friendly by default. It doesn't block scrolling the page when swiping inside it:
+the user needs to press an item during at least 200ms to start the drag gesture.
+
+On non-touch device, the drag gesture only starts after moving an element by at least one pixel.
+This is done to avoid blocking clicks on clickable elements inside an item.
+
 ## Features
 
 - Supports horizontal and vertical lists
@@ -56,6 +64,19 @@ const App = () => {
   )
 }
 ```
+
+## Props
+
+### SortableList
+
+| Name                     |                   Description                    |                      Type                      | Default |
+| ------------------------ | :----------------------------------------------: | :--------------------------------------------: | ------: |
+| **onSortEnd\***          | Called when the user finishes a sorting gesture. | `(oldIndex: number, newIndex: number) => void` |       - |
+| **draggedItemClassName** |     Class applied to the item being dragged      |                    `string`                    |       - |
+
+### SortableItem
+
+This component doesn't take any other props than its child. This child should be a single React element that can receives a ref. If you pass a component as a child, it needs to be wrapped with `React.forwardRef()`.
 
 ## Development
 
