@@ -2,6 +2,8 @@
 
 A React component to sort items in lists or grids
 
+![react-easy-sort-demo](https://user-images.githubusercontent.com/2678610/107010948-4a58fa80-6797-11eb-95f8-bc7d3abbdc96.gif)
+
 ## Features
 
 - Supports horizontal and vertical lists
