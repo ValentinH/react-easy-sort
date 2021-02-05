@@ -2,7 +2,7 @@
 
 A React component to sort items in lists or grids
 
-![react-easy-sort-demo](https://user-images.githubusercontent.com/2678610/107010948-4a58fa80-6797-11eb-95f8-bc7d3abbdc96.gif)
+![react-easy-sort-demo](https://user-images.githubusercontent.com/2678610/107036435-f27fbb00-67b9-11eb-8e3f-72a000586d35.gif)
 
 The goal of this component is to allow sorting elements with drag and drop.
 
