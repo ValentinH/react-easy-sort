@@ -9,6 +9,15 @@ A React component to sort items in lists or grids
 - Mobile-friendly
 - IE11 support 🙈
 
+## Demo
+
+Check out the examples:
+
+- [Example with grid layout](https://codesandbox.io/s/react-easy-sort-grid-demo-87ev9)
+- [Example with vertical list layout](https://codesandbox.io/s/react-easy-sort-vertical-list-demo-njg4i)
+- [Example with horizontal list layout](https://codesandbox.io/s/react-easy-sort-horizontal-list-demo-69b3k)
+- [Interactive avatars demo](https://codesandbox.io/s/react-easy-sort-images-demo-486qk)
+
 ## Installation
 
 ```shell
