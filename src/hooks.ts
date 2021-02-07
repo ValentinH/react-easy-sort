@@ -120,7 +120,6 @@ export const useDrag = ({ onStart, onMove, onEnd, containerRef }: UseDragProps) 
     [onDrag]
   )
 
-  // shared logic for mouse up and touchend
   const onMouseUp = React.useCallback(() => {
     isFirstMoveRef.current = false
     document.removeEventListener('mousemove', onMouseMove)
