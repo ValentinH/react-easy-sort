@@ -111,6 +111,11 @@ const SortableList = ({ children, onSortEnd, draggedItemClassName, ...rest }: Pr
       const source = itemsRef.current[sourceIndex]
       source.style.opacity = '0'
       source.style.visibility = 'hidden'
+
+      // Adds a nice little physical feedback
+      if (window.navigator.vibrate) {
+        window.navigator.vibrate(100)
+      }
     },
     onMove: ({ point, pointInWindow }) => {
       updateTargetPosition(point)
