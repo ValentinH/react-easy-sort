@@ -19,6 +19,18 @@ const getPointInContainer = (point: Point, containerTopLeft: Point): Point => {
   }
 }
 
+const preventDefault = (event: Event) => {
+  event.preventDefault()
+}
+
+const disableContextMenu = () => {
+  window.addEventListener('contextmenu', preventDefault, { capture: true, passive: false })
+}
+
+const enableContextMenu = () => {
+  window.removeEventListener('contextmenu', preventDefault)
+}
+
 export type OnStartArgs = { point: Point; pointInWindow: Point }
 export type OnMoveArgs = { point: Point; pointInWindow: Point }
 
@@ -121,6 +133,7 @@ export const useDrag = ({ onStart, onMove, onEnd, containerRef }: UseDragProps) 
   const onTouchEnd = React.useCallback(() => {
     document.removeEventListener('touchmove', onTouchMove)
     document.removeEventListener('touchend', onTouchEnd)
+    enableContextMenu()
     if (callbacksRef.current.onEnd) {
       callbacksRef.current.onEnd()
     }
@@ -147,6 +160,7 @@ export const useDrag = ({ onStart, onMove, onEnd, containerRef }: UseDragProps) 
     (point: Point, pointInWindow: Point) => {
       document.addEventListener('touchmove', onTouchMove, { capture: false, passive: false })
       document.addEventListener('touchend', onTouchEnd)
+      disableContextMenu()
 
       if (callbacksRef.current.onStart) {
         callbacksRef.current.onStart({ point, pointInWindow })
@@ -205,6 +219,7 @@ export const useDrag = ({ onStart, onMove, onEnd, containerRef }: UseDragProps) 
         document.removeEventListener('touchend', touchScrollListener)
         document.removeEventListener('touchmove', onTouchMove)
         document.removeEventListener('touchend', onTouchEnd)
+        enableContextMenu()
         cancelTouchStart()
       }
     }
