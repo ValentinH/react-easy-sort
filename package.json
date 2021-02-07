@@ -60,7 +60,6 @@
     "babel-eslint": "10.x",
     "babel-loader": "^8.0.5",
     "bili": "^5.0.5",
-    "copy-webpack-plugin": "^6.1.1",
     "css-loader": "^4.3.0",
     "eslint": "7.9.0",
     "eslint-config-prettier": "^6.9.0",

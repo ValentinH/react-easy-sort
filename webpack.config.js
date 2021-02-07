@@ -1,6 +1,5 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const htmlWebpackPlugin = new HtmlWebpackPlugin({
   template: path.join(__dirname, 'examples/src/index.html'),
@@ -25,10 +24,7 @@ module.exports = {
       { test: /\.css$/, include: [path.resolve('./src')], use: 'raw-loader' },
     ],
   },
-  plugins: [
-    htmlWebpackPlugin,
-    new CopyWebpackPlugin({ patterns: [{ from: 'examples/src/images', to: 'images' }] }),
-  ],
+  plugins: [htmlWebpackPlugin],
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.css'],
   },
