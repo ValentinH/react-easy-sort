@@ -2,6 +2,8 @@
 
 A React component to sort items in lists or grids
 
+[![version][version-badge]][package] [![Monthly downloads][npmstats-badge]][npmstats] ![gzip size][gzip-badge] [![MIT License][license-badge]][license] [![PRs Welcome][prs-badge]][prs]
+
 ![react-easy-sort-demo](https://user-images.githubusercontent.com/2678610/107036435-f27fbb00-67b9-11eb-8e3f-72a000586d35.gif)
 
 The goal of this component is to allow sorting elements with drag and drop.
@@ -94,3 +96,16 @@ Now, open `http://localhost:3001/index.html` and start hacking!
 ## Alternatives
 - https://github.com/clauderic/react-sortable-hoc : before creating this library, I was using it and it was also supporting grid layouts. However, we had a lot of errors reported to our Sentry and this project was not maintained anymore.
 - https://github.com/atlassian/react-beautiful-dnd: another great library for sorting items. However, it doesn't support grid layouts (as of 2021-02-05).
+
+[npm]: https://www.npmjs.com/
+[node]: https://nodejs.org
+[version-badge]: https://img.shields.io/npm/v/react-easy-sort.svg?style=flat-square
+[package]: https://www.npmjs.com/package/react-easy-sort
+[downloads-badge]: https://img.shields.io/npm/dm/react-easy-sort.svg?style=flat-square
+[npmstats]: http://npm-stat.com/charts.html?package=react-easy-sort&from=2018-06-18
+[npmstats-badge]: https://img.shields.io/npm/dm/react-easy-sort.svg?style=flat-square
+[gzip-badge]: http://img.badgesize.io/https://unpkg.com/react-easy-sort/umd/react-easy-sort.min.js?compression=gzip&style=flat-square&1
+[license-badge]: https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
+[license]: https://github.com/ricardo-ch/react-easy-sort/blob/main/LICENSE
+[prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
+[prs]: http://makeapullrequest.com
