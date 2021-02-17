@@ -23,7 +23,7 @@
   "scripts": {
     "start": "yarn storybook",
     "version": "yarn && yarn build",
-    "build": "yarn-or-npm bili && yarn-or-npm build:copy-files",
+    "build": "yarn-or-npm bili && yarn-or-npm build:copy-files && yarn build-storybook",
     "test": "yarn-or-npm unit && yarn-or-npm lint && yarn-or-npm lint:ts",
     "unit": "jest src",
     "unit:watch": "jest --watchAll src",
@@ -31,14 +31,12 @@
     "lint:ts": "tsc --noEmit",
     "prebuild": "rimraf dist",
     "build:copy-files": "babel-node ./scripts/copy-build-files.js",
-    "prepublishOnly": "pinst --disable",
+    "prepublishOnly": "yarn-or-npm build",
     "precommit": "lint-staged",
     "format": "prettier --write src/**/*.ts*",
     "npm:publish": "np --contents=dist",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook -o ./docs",
-    "postinstall": "husky install",
-    "postpublish": "pinst --enable"
+    "build-storybook": "build-storybook -o ./docs"
   },
   "peerDependencies": {
     "react": ">=16.4.0",
@@ -78,7 +76,6 @@
     "eslint-plugin-jsx-a11y": "6.x",
     "eslint-plugin-react": "7.x",
     "eslint-plugin-react-hooks": "4.1.2",
-    "husky": "^5.0.9",
     "jest": "26.4.2",
     "lint-staged": "^10.4.0",
     "np": "^6.5.0",
