@@ -97,8 +97,7 @@
   "lint-staged": {
     "*.+(ts|tsx|js|css)": [
       "prettier --write",
-      "git add",
-      "yarn build-storybook"
+      "git add"
     ]
   },
   "jest": {
