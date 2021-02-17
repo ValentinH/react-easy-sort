@@ -23,7 +23,7 @@
   "scripts": {
     "start": "yarn storybook",
     "version": "yarn && yarn build",
-    "build": "yarn-or-npm bili && yarn-or-npm build:copy-files && yarn build-storybook",
+    "build": "yarn-or-npm bili && yarn-or-npm build:copy-files",
     "test": "yarn-or-npm unit && yarn-or-npm lint && yarn-or-npm lint:ts",
     "unit": "jest src",
     "unit:watch": "jest --watchAll src",
@@ -79,7 +79,6 @@
     "jest": "26.4.2",
     "lint-staged": "^10.4.0",
     "np": "^6.5.0",
-    "pinst": "^2.1.4",
     "prettier": "^2.1.2",
     "query-string": "^6.1.0",
     "raw-loader": "^4.0.1",
