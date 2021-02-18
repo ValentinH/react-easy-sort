@@ -94,6 +94,7 @@ Now, open `http://localhost:3001/index.html` and start hacking!
 [MIT](https://github.com/ricardo-ch/react-easy-sort/blob/master/LICENSE)
 
 ## Alternatives
+
 - https://github.com/clauderic/react-sortable-hoc : before creating this library, I was using it and it was also supporting grid layouts. However, we had a lot of errors reported to our Sentry and this project was not maintained anymore.
 - https://github.com/atlassian/react-beautiful-dnd: another great library for sorting items. However, it doesn't support grid layouts (as of 2021-02-05).
 
