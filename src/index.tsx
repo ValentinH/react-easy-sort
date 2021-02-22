@@ -252,7 +252,8 @@ export const SortableItem = ({ children }: ItemProps) => {
         removeItem(currentItem)
       }
     }
-  }, [registerItem, removeItem])
+    // if the children changes, we want to re-register the DOM node
+  }, [registerItem, removeItem, children])
 
   return React.cloneElement(children, { ref: elementRef })
 }
