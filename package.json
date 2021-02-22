@@ -27,7 +27,7 @@
     "test": "yarn-or-npm unit && yarn-or-npm lint && yarn-or-npm lint:ts",
     "unit": "jest src",
     "unit:watch": "jest --watchAll src",
-    "lint": "eslint --ext .ts,.tsx ./examples ./src",
+    "lint": "eslint --ext .ts,.tsx ./src",
     "lint:ts": "tsc --noEmit",
     "prebuild": "rimraf dist",
     "build:copy-files": "babel-node ./scripts/copy-build-files.js",
