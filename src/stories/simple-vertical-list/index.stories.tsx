@@ -38,7 +38,7 @@ const useStyles = makeStyles({
 
 export const Demo = () => {
   const classes = useStyles()
-  const count = number('Items', 9, { min: 3, max: 12, range: true })
+  const count = number('Items', 90, { min: 3, max: 12, range: true })
 
   const [items, setItems] = React.useState<string[]>([])
   React.useEffect(() => {

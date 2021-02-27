@@ -1,8 +1,9 @@
 import arrayMove from 'array-move'
 import React, { HTMLAttributes } from 'react'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { findItemIndexAtPosition } from './helpers'
-import { useDrag } from './hooks'
+import { useAutoScroll, useDrag } from './hooks'
 import { Point } from './types'
 
 type Props = HTMLAttributes<HTMLDivElement> & {
@@ -36,14 +37,24 @@ const SortableList = ({ children, onSortEnd, draggedItemClassName, ...rest }: Pr
   // contains the index in the itemsRef of the element to be exchanged with the source item
   const lastTargetIndexRef = React.useRef<number | undefined>(undefined)
 
+  const debouncedOnScroll = useDebouncedCallback(() => {
+    itemsRect.current = itemsRef.current.map((item) => item.getBoundingClientRect())
+  }, 50)
+
+  const { autoScroll, cancelScroll } = useAutoScroll({
+    container: containerRef.current,
+    onScroll: debouncedOnScroll.callback,
+  })
+
   React.useEffect(() => {
     return () => {
       // cleanup the target element from the DOM when SortableList in unmounted
       if (targetRef.current) {
         document.body.removeChild(targetRef.current)
       }
+      debouncedOnScroll.cancel()
     }
-  }, [])
+  }, [debouncedOnScroll])
 
   const updateTargetPosition = (position: Point) => {
     if (targetRef.current) {
@@ -91,7 +102,6 @@ const SortableList = ({ children, onSortEnd, draggedItemClassName, ...rest }: Pr
       if (!containerRef.current) {
         return
       }
-
       itemsRect.current = itemsRef.current.map((item) => item.getBoundingClientRect())
 
       const sourceIndex = findItemIndexAtPosition(pointInWindow, itemsRect.current)
@@ -163,6 +173,9 @@ const SortableList = ({ children, onSortEnd, draggedItemClassName, ...rest }: Pr
         // we want the translation to be animated
         currentItem.style.transitionDuration = '300ms'
       }
+      if (targetRef.current) {
+        autoScroll({ draggingRect: targetRef.current.getBoundingClientRect() })
+      }
     },
     onEnd: () => {
       // we reset all items translations (the parent is expected to sort the items in the onSortEnd callback)
@@ -199,6 +212,8 @@ const SortableList = ({ children, onSortEnd, draggedItemClassName, ...rest }: Pr
         document.body.removeChild(targetRef.current)
         targetRef.current = null
       }
+
+      cancelScroll()
     },
   })
 
