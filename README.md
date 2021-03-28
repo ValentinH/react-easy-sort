@@ -103,7 +103,7 @@ Now, open `http://localhost:3001/index.html` and start hacking!
 [version-badge]: https://img.shields.io/npm/v/react-easy-sort.svg?style=flat-square
 [package]: https://www.npmjs.com/package/react-easy-sort
 [downloads-badge]: https://img.shields.io/npm/dm/react-easy-sort.svg?style=flat-square
-[npmstats]: http://npm-stat.com/charts.html?package=react-easy-sort&from=2018-06-18
+[npmstats]: https://npm-stat.com/charts.html?package=react-easy-sort&from=2021-02-01
 [npmstats-badge]: https://img.shields.io/npm/dm/react-easy-sort.svg?style=flat-square
 [gzip-badge]: http://img.badgesize.io/https://unpkg.com/react-easy-sort/umd/react-easy-sort.min.js?compression=gzip&style=flat-square&1
 [license-badge]: https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
