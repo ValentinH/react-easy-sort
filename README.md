@@ -80,6 +80,12 @@ const App = () => {
 
 This component doesn't take any other props than its child. This child should be a single React element that can receives a ref. If you pass a component as a child, it needs to be wrapped with `React.forwardRef()`.
 
+## Recommended CSS rules
+
+To disable browser default behaviors than can interfer with the dragging experience, we recommend adding the following declarations on the "items":
+- `user-select: none;`: disable the selection of content inside the item (the blue box)
+- `pointer-events: none;`: required for some browsers if your items contain images (see the [Interactive avatars demo](https://codesandbox.io/s/react-easy-sort-images-demo-486qk))
+
 ## Development
 
 ```shell
