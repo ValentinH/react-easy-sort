@@ -35,6 +35,8 @@ const SortableList = ({ children, onSortEnd, draggedItemClassName, ...rest }: Pr
   const sourceIndexRef = React.useRef<number | undefined>(undefined)
   // contains the index in the itemsRef of the element to be exchanged with the source item
   const lastTargetIndexRef = React.useRef<number | undefined>(undefined)
+  // contains the offset point where the initial drag occured to be used when dragging the item
+  const offsetPointRef = React.useRef<Point>({ x: 0, y: 0 })
 
   React.useEffect(() => {
     return () => {
@@ -47,8 +49,12 @@ const SortableList = ({ children, onSortEnd, draggedItemClassName, ...rest }: Pr
 
   const updateTargetPosition = (position: Point) => {
     if (targetRef.current) {
+      const offset = offsetPointRef.current
+
       // we use `translate3d` to force using the GPU if available
-      targetRef.current.style.transform = `translate(-50%, -50%) translate3d(${position.x}px, ${position.y}px, 0px)`
+      targetRef.current.style.transform = `translate3d(${position.x - offset.x}px, ${
+        position.y - offset.y
+      }px, 0px)`
     }
   }
 
@@ -105,12 +111,19 @@ const SortableList = ({ children, onSortEnd, draggedItemClassName, ...rest }: Pr
 
       // the item being dragged is copied to the document body and will be used as the target
       copyItem(sourceIndex)
-      updateTargetPosition(point)
 
       // hide source during the drag gesture
       const source = itemsRef.current[sourceIndex]
       source.style.opacity = '0'
       source.style.visibility = 'hidden'
+
+      // get the offset between the source item and the point in window
+      offsetPointRef.current = {
+        x: pointInWindow.x - source.offsetLeft,
+        y: pointInWindow.y - source.offsetTop,
+      }
+
+      updateTargetPosition(point)
 
       // Adds a nice little physical feedback
       if (window.navigator.vibrate) {
