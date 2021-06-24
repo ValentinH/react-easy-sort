@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import arrayMove from 'array-move'
 
 import { withKnobs, number } from '@storybook/addon-knobs'
@@ -18,6 +18,8 @@ const useStyles = makeStyles({
   list: {
     fontFamily: 'Helvetica, Arial, sans-serif',
     userSelect: 'none',
+    position: 'absolute',
+    left: 200,
   },
   item: {
     flexShrink: 0,

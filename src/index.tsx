@@ -77,12 +77,12 @@ const SortableList = ({ children, onSortEnd, draggedItemClassName, ...rest }: Pr
       // we ensure the copy has the same size than the source element
       copy.style.width = `${sourceRect.width}px`
       copy.style.height = `${sourceRect.height}px`
-      // we place the target starting position at the top-left of the container
+      // we place the target starting position to the top left of the window
       // it will then be moved relatively using `transform: translate3d()`
-      const containerBounds = containerRef.current.getBoundingClientRect()
       copy.style.position = 'fixed'
-      copy.style.top = `${containerBounds.top}px`
-      copy.style.left = `${containerBounds.left}px`
+      copy.style.margin = '0'
+      copy.style.top = '0'
+      copy.style.left = '0'
 
       document.body.appendChild(copy)
 
@@ -93,7 +93,7 @@ const SortableList = ({ children, onSortEnd, draggedItemClassName, ...rest }: Pr
 
   const listeners = useDrag({
     containerRef,
-    onStart: ({ point, pointInWindow }) => {
+    onStart: ({ pointInWindow }) => {
       if (!containerRef.current) {
         return
       }
@@ -117,21 +117,22 @@ const SortableList = ({ children, onSortEnd, draggedItemClassName, ...rest }: Pr
       source.style.opacity = '0'
       source.style.visibility = 'hidden'
 
-      // get the offset between the source item and the point in window
+      // get the offset between the source item's window position relative to the point in window
+      const sourceRect = source.getBoundingClientRect()
       offsetPointRef.current = {
-        x: pointInWindow.x - source.offsetLeft,
-        y: pointInWindow.y - source.offsetTop,
+        x: pointInWindow.x - sourceRect.left,
+        y: pointInWindow.y - sourceRect.top,
       }
 
-      updateTargetPosition(point)
+      updateTargetPosition(pointInWindow)
 
       // Adds a nice little physical feedback
       if (window.navigator.vibrate) {
         window.navigator.vibrate(100)
       }
     },
-    onMove: ({ point, pointInWindow }) => {
-      updateTargetPosition(point)
+    onMove: ({ pointInWindow }) => {
+      updateTargetPosition(pointInWindow)
 
       const sourceIndex = sourceIndexRef.current
       // if there is no source, we exit early (happened when drag gesture was started outside a SortableItem)
