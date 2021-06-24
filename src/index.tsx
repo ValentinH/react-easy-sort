@@ -7,6 +7,8 @@ import { Point } from './types'
 
 type Props = HTMLAttributes<HTMLDivElement> & {
   children: React.ReactNode
+  /** Determines whether drag functionality is enabled, defaults to true */
+  allowDrag?: boolean | undefined
   /** Called when the user finishes a sorting gesture. */
   onSortEnd: (oldIndex: number, newIndex: number) => void
   /** Class applied to the item being dragged */
@@ -22,7 +24,7 @@ type Context = {
 
 const SortableListContext = React.createContext<Context | undefined>(undefined)
 
-const SortableList = ({ children, onSortEnd, draggedItemClassName, ...rest }: Props) => {
+const SortableList = ({ children, allowDrag = true, onSortEnd, draggedItemClassName, ...rest }: Props) => {
   // this array contains the elements than can be sorted (wrapped inside SortableItem)
   const itemsRef = React.useRef<HTMLElement[]>([])
   // this array contains the coordinates of each sortable element (only computed on dragStart and used in dragMove for perf reason)
@@ -232,7 +234,7 @@ const SortableList = ({ children, onSortEnd, draggedItemClassName, ...rest }: Pr
   const context = React.useMemo(() => ({ registerItem, removeItem }), [registerItem, removeItem])
 
   return (
-    <div {...listeners} {...rest} ref={containerRef}>
+    <div {...(allowDrag ? listeners : {})} {...rest} ref={containerRef}>
       <SortableListContext.Provider value={context}>{children}</SortableListContext.Provider>
     </div>
   )
