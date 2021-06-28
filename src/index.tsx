@@ -8,7 +8,7 @@ import { Point } from './types'
 type Props = HTMLAttributes<HTMLDivElement> & {
   children: React.ReactNode
   /** Determines whether drag functionality is enabled, defaults to true */
-  allowDrag?: boolean | undefined
+  allowDrag?: boolean
   /** Called when the user finishes a sorting gesture. */
   onSortEnd: (oldIndex: number, newIndex: number) => void
   /** Class applied to the item being dragged */
