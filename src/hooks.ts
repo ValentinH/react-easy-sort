@@ -39,7 +39,7 @@ type UseDragProps = {
   onMove?: (args: OnMoveArgs) => void
   onEnd?: () => void
   containerRef: React.MutableRefObject<HTMLDivElement | null>
-  knobs?: HTMLElement[],
+  knobs?: HTMLElement[]
 }
 
 export const useDrag = ({ onStart, onMove, onEnd, containerRef, knobs }: UseDragProps) => {
@@ -146,8 +146,8 @@ export const useDrag = ({ onStart, onMove, onEnd, containerRef, knobs }: UseDrag
         return
       }
 
-      if (knobs.length && !knobs.find(knob => knob.contains(e.target))) {
-        return;
+      if (knobs?.length && !knobs.find((knob) => knob.contains(e.target as Node))) {
+        return
       }
 
       document.addEventListener('mousemove', onMouseMove)
@@ -176,8 +176,8 @@ export const useDrag = ({ onStart, onMove, onEnd, containerRef, knobs }: UseDrag
 
   const onTouchStart = React.useCallback(
     (e: TouchEvent) => {
-      if (knobs.length && !knobs.find(knob => knob.contains(e.target))) {
-        return;
+      if (knobs?.length && !knobs.find((knob) => knob.contains(e.target as Node))) {
+        return
       }
 
       saveContainerPosition()
