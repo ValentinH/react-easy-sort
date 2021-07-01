@@ -39,7 +39,7 @@ type UseDragProps = {
   onMove?: (args: OnMoveArgs) => void
   onEnd?: () => void
   containerRef: React.MutableRefObject<HTMLDivElement | null>
-  knobs?: [],
+  knobs?: HTMLElement[],
 }
 
 export const useDrag = ({ onStart, onMove, onEnd, containerRef, knobs }: UseDragProps) => {
