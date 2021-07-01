@@ -295,7 +295,7 @@ export const SortableKnob = ({ children  }: ItemProps) => {
   const context = React.useContext(SortableListContext)
 
   if (!context) {
-    throw new Error('SortableItem must be a child of SortableList')
+    throw new Error('SortableKnob must be a child of SortableList')
   }
 
   const { registerKnob, removeKnob } = context;
