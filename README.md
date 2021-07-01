@@ -45,7 +45,7 @@ npm install react-easy-sort --save
 ## Basic usage
 
 ```js
-import SortableList, { SortableItem } from 'react-easy-sort'
+import SortableList, { SortableItem, SortableKnob } from 'react-easy-sort'
 import arrayMove from 'array-move'
 
 const App = () => {
@@ -59,7 +59,10 @@ const App = () => {
     <SortableList onSortEnd={onSortEnd} className="list" draggedItemClassName="dragged">
       {items.map((item) => (
         <SortableItem key={item}>
-          <div className="item">{item}</div>
+          <div className="item">
+            <SortableKnob><div>Drag me</div></SortableKnob>
+            {item}
+          </div>
         </SortableItem>
       ))}
     </SortableList>
@@ -81,6 +84,11 @@ const App = () => {
 ### SortableItem
 
 This component doesn't take any other props than its child. This child should be a single React element that can receives a ref. If you pass a component as a child, it needs to be wrapped with `React.forwardRef()`.
+
+### SortableKnob
+
+This component doesn't take any other props than its child. This child should be a single React element that can receives a ref. If you pass a component as a child, it needs to be wrapped with `React.forwardRef()`.
+
 
 ## Recommended CSS rules
 
