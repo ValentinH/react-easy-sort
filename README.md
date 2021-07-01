@@ -75,16 +75,50 @@ const App = () => {
 | ------------------------ | :----------------------------------------------: | :--------------------------------------------: | ------: |
 | **onSortEnd\***          | Called when the user finishes a sorting gesture. | `(oldIndex: number, newIndex: number) => void` |       - |
 | **draggedItemClassName** |     Class applied to the item being dragged      |                    `string`                    |       - |
-| **allowDrag**            |     Determines whether items can be dragged      |                    `boolean`                   |   `true`|
-
+| **allowDrag**            |     Determines whether items can be dragged      |                   `boolean`                    |  `true` |
 
 ### SortableItem
+
+This component doesn't take any other props than its child. This child should be a single React element that can receives a ref. If you pass a component as a child, it needs to be wrapped with `React.forwardRef()`.
+
+### SortableKnob
+
+You can use this component if you doesn't want to whole item to be draggable but only a specific area of it.
+
+```js
+import SortableList, { SortableItem, SortableKnob } from 'react-easy-sort'
+import arrayMove from 'array-move'
+
+const App = () => {
+  const [items, setItems] = React.useState(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'])
+
+  const onSortEnd = (oldIndex: number, newIndex: number) => {
+    setItems((array) => arrayMove(array, oldIndex, newIndex))
+  }
+
+  return (
+    <SortableList onSortEnd={onSortEnd} className="list" draggedItemClassName="dragged">
+      {items.map((item) => (
+        <SortableItem key={item}>
+          <div className="item">
+            <SortableKnob>
+              <div>Drag me</div>
+            </SortableKnob>
+            {item}
+          </div>
+        </SortableItem>
+      ))}
+    </SortableList>
+  )
+}
+```
 
 This component doesn't take any other props than its child. This child should be a single React element that can receives a ref. If you pass a component as a child, it needs to be wrapped with `React.forwardRef()`.
 
 ## Recommended CSS rules
 
 To disable browser default behaviors than can interfer with the dragging experience, we recommend adding the following declarations on the "items":
+
 - `user-select: none;`: disable the selection of content inside the item (the blue box)
 - `pointer-events: none;`: required for some browsers if your items contain images (see the [Interactive avatars demo](https://codesandbox.io/s/react-easy-sort-images-demo-486qk))
 

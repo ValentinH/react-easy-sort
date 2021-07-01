@@ -39,9 +39,10 @@ type UseDragProps = {
   onMove?: (args: OnMoveArgs) => void
   onEnd?: () => void
   containerRef: React.MutableRefObject<HTMLDivElement | null>
+  knobs?: HTMLElement[]
 }
 
-export const useDrag = ({ onStart, onMove, onEnd, containerRef }: UseDragProps) => {
+export const useDrag = ({ onStart, onMove, onEnd, containerRef, knobs }: UseDragProps) => {
   // contains the top-left coordinates of the container in the window. Set on drag start and used in drag move
   const containerPositionRef = React.useRef<Point>({ x: 0, y: 0 })
   // on touch devices, we only start the drag gesture after pressing the item 200ms.
@@ -144,6 +145,11 @@ export const useDrag = ({ onStart, onMove, onEnd, containerRef }: UseDragProps) 
         // we don't want to handle clicks other than left ones
         return
       }
+
+      if (knobs?.length && !knobs.find((knob) => knob.contains(e.target as Node))) {
+        return
+      }
+
       document.addEventListener('mousemove', onMouseMove)
       document.addEventListener('mouseup', onMouseUp)
 
@@ -152,7 +158,7 @@ export const useDrag = ({ onStart, onMove, onEnd, containerRef }: UseDragProps) 
       // mark the next move as being the first one
       isFirstMoveRef.current = true
     },
-    [onMouseMove, onMouseUp, saveContainerPosition]
+    [onMouseMove, onMouseUp, saveContainerPosition, knobs]
   )
 
   const handleTouchStart = React.useCallback(
@@ -170,6 +176,10 @@ export const useDrag = ({ onStart, onMove, onEnd, containerRef }: UseDragProps) 
 
   const onTouchStart = React.useCallback(
     (e: TouchEvent) => {
+      if (knobs?.length && !knobs.find((knob) => knob.contains(e.target as Node))) {
+        return
+      }
+
       saveContainerPosition()
 
       const pointInWindow = getTouchPoint(e.touches[0])
@@ -182,7 +192,7 @@ export const useDrag = ({ onStart, onMove, onEnd, containerRef }: UseDragProps) 
         120
       )
     },
-    [handleTouchStart, saveContainerPosition]
+    [handleTouchStart, saveContainerPosition, knobs]
   )
 
   const detectTouchDevice = React.useCallback(() => {

@@ -20,6 +20,8 @@ type Props = HTMLAttributes<HTMLDivElement> & {
 type Context = {
   registerItem: (item: HTMLDivElement) => void
   removeItem: (item: HTMLDivElement) => void
+  registerKnob:  (item: HTMLDivElement) => void
+  removeKnob:  (item: HTMLDivElement) => void
 }
 
 const SortableListContext = React.createContext<Context | undefined>(undefined)
@@ -29,6 +31,8 @@ const SortableList = ({ children, allowDrag = true, onSortEnd, draggedItemClassN
   const itemsRef = React.useRef<HTMLElement[]>([])
   // this array contains the coordinates of each sortable element (only computed on dragStart and used in dragMove for perf reason)
   const itemsRect = React.useRef<DOMRect[]>([])
+  // Hold all registered knobs
+  const knobs = React.useRef<HTMLElement[]>([]);
   // contains the container element
   const containerRef = React.useRef<HTMLDivElement | null>(null)
   // contains the target element (copy of the source element)
@@ -37,7 +41,7 @@ const SortableList = ({ children, allowDrag = true, onSortEnd, draggedItemClassN
   const sourceIndexRef = React.useRef<number | undefined>(undefined)
   // contains the index in the itemsRef of the element to be exchanged with the source item
   const lastTargetIndexRef = React.useRef<number | undefined>(undefined)
-  // contains the offset point where the initial drag occured to be used when dragging the item
+  // contains the offset point where the initial drag occurred to be used when dragging the item
   const offsetPointRef = React.useRef<Point>({ x: 0, y: 0 })
 
   React.useEffect(() => {
@@ -95,6 +99,7 @@ const SortableList = ({ children, allowDrag = true, onSortEnd, draggedItemClassN
 
   const listeners = useDrag({
     containerRef,
+    knobs: knobs.current,
     onStart: ({ pointInWindow }) => {
       if (!containerRef.current) {
         return
@@ -229,9 +234,21 @@ const SortableList = ({ children, allowDrag = true, onSortEnd, draggedItemClassN
     }
   }, [])
 
+  const registerKnob = React.useCallback((item: HTMLDivElement) => {
+    knobs.current.push(item)
+  }, [])
+
+  const removeKnob = React.useCallback((item: HTMLDivElement) => {
+    const index = knobs.current.indexOf(item)
+
+    if (index !== -1) {
+      knobs.current.splice(index, 1)
+    }
+  }, [])
+
   // we need to memoize the context to avoid re-rendering every children of the context provider
   // when not needed
-  const context = React.useMemo(() => ({ registerItem, removeItem }), [registerItem, removeItem])
+  const context = React.useMemo(() => ({ registerItem, removeItem, registerKnob, removeKnob }), [registerItem, removeItem, registerKnob, removeKnob])
 
   return (
     <div {...(allowDrag ? listeners : {})} {...rest} ref={containerRef}>
@@ -273,3 +290,32 @@ export const SortableItem = ({ children }: ItemProps) => {
 
   return React.cloneElement(children, { ref: elementRef })
 }
+
+export const SortableKnob = ({ children  }: ItemProps) => {
+  const context = React.useContext(SortableListContext)
+
+  if (!context) {
+    throw new Error('SortableKnob must be a child of SortableList')
+  }
+
+  const { registerKnob, removeKnob } = context;
+
+  const elementRef = React.useRef<HTMLDivElement | null>(null)
+
+  React.useEffect(() => {
+    const currentItem = elementRef.current
+
+    if (currentItem) {
+      registerKnob(currentItem)
+    }
+
+    return () => {
+      if (currentItem) {
+        removeKnob(currentItem)
+      }
+    }
+    // if the children changes, we want to re-register the DOM node
+  }, [registerKnob, removeKnob, children])
+
+  return React.cloneElement(children, { ref: elementRef })
+};
