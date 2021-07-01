@@ -32,7 +32,7 @@ const SortableList = ({ children, allowDrag = true, onSortEnd, draggedItemClassN
   // this array contains the coordinates of each sortable element (only computed on dragStart and used in dragMove for perf reason)
   const itemsRect = React.useRef<DOMRect[]>([])
   // Hold all registered knobs
-  const knobs = React.useRef([]);
+  const knobs = React.useRef<HTMLElement[]>([]);
   // contains the container element
   const containerRef = React.useRef<HTMLDivElement | null>(null)
   // contains the target element (copy of the source element)
