@@ -4,12 +4,12 @@ import arrayMove from 'array-move'
 import { withKnobs, number } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
 
-import SortableList, { SortableItem } from '../../index'
+import SortableList, { SortableItem, SortableKnob } from '../../index'
 import { generateItems } from '../helpers'
 import { makeStyles } from '@material-ui/core'
 
 export default {
-  title: 'react-easy-sort/Simple vertical list',
+  title: 'react-easy-sort/With knobs',
   component: SortableList,
   decorators: [withKnobs],
 }
@@ -22,17 +22,26 @@ const useStyles = makeStyles({
   item: {
     flexShrink: 0,
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: 'rgb(84, 84, 241)',
     color: 'white',
     margin: 8,
     width: 150,
     height: 34,
-    cursor: 'grab',
+    padding: '0 8px',
   },
   dragged: {
     backgroundColor: 'rgb(37, 37, 197)',
+  },
+  knob: {
+    padding: '0.15rem 0.5rem',
+    color: 'rgb(84, 84, 241)',
+    fontSize: '0.8em',
+    backgroundColor: 'white',
+    marginRight: '0.5rem',
+    borderRadius: '2px',
+    cursor: 'grab',
   },
 })
 
@@ -58,7 +67,12 @@ export const Demo = () => {
     >
       {items.map((item) => (
         <SortableItem key={item}>
-          <div className={classes.item}>{item}</div>
+          <div className={classes.item}>
+            <SortableKnob>
+              <div className={classes.knob}>DRAG</div>
+            </SortableKnob>
+            {item}
+          </div>
         </SortableItem>
       ))}
     </SortableList>
