@@ -176,6 +176,10 @@ export const useDrag = ({ onStart, onMove, onEnd, containerRef, knobs }: UseDrag
 
   const onTouchStart = React.useCallback(
     (e: TouchEvent) => {
+      if (knobs.length && !knobs.find(knob => knob.contains(e.target))) {
+        return;
+      }
+
       saveContainerPosition()
 
       const pointInWindow = getTouchPoint(e.touches[0])
@@ -188,7 +192,7 @@ export const useDrag = ({ onStart, onMove, onEnd, containerRef, knobs }: UseDrag
         120
       )
     },
-    [handleTouchStart, saveContainerPosition]
+    [handleTouchStart, saveContainerPosition, knobs]
   )
 
   const detectTouchDevice = React.useCallback(() => {
