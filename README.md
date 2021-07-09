@@ -29,6 +29,7 @@ Check out the examples:
 - [Example with vertical list layout](https://codesandbox.io/s/react-easy-sort-vertical-list-demo-njg4i)
 - [Example with horizontal list layout](https://codesandbox.io/s/react-easy-sort-horizontal-list-demo-69b3k)
 - [Interactive avatars demo](https://codesandbox.io/s/react-easy-sort-images-demo-486qk)
+- [Example with custom knobs](https://codesandbox.io/s/react-easy-sort-custom-knob-demo-ij37h)
 
 ## Installation
 
