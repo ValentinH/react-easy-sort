@@ -38,7 +38,7 @@ type UseDragProps = {
   onStart?: (args: OnStartArgs) => void
   onMove?: (args: OnMoveArgs) => void
   onEnd?: () => void
-  containerRef: React.MutableRefObject<HTMLDivElement | null>
+  containerRef: React.MutableRefObject<HTMLElement | null>
   knobs?: HTMLElement[]
 }
 
@@ -140,7 +140,7 @@ export const useDrag = ({ onStart, onMove, onEnd, containerRef, knobs }: UseDrag
   }, [onTouchMove])
 
   const onMouseDown = React.useCallback(
-    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
       if (e.button !== 0) {
         // we don't want to handle clicks other than left ones
         return

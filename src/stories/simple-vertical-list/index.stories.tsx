@@ -52,6 +52,7 @@ export const Demo = () => {
 
   return (
     <SortableList
+      as="div"
       onSortEnd={onSortEnd}
       className={classes.list}
       draggedItemClassName={classes.dragged}

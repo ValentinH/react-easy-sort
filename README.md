@@ -57,7 +57,7 @@ const App = () => {
   }
 
   return (
-    <SortableList onSortEnd={onSortEnd} className="list" draggedItemClassName="dragged">
+    <SortableList as="div" onSortEnd={onSortEnd} className="list" draggedItemClassName="dragged">
       {items.map((item) => (
         <SortableItem key={item}>
           <div className="item">{item}</div>
@@ -74,6 +74,7 @@ const App = () => {
 
 | Name                     |                   Description                    |                      Type                      | Default |
 | ------------------------ | :----------------------------------------------: | :--------------------------------------------: | ------: |
+| **as**                   |     Determines html tag for container element    |         `keyof JSX.IntrinisticElements`        |       - |
 | **onSortEnd\***          | Called when the user finishes a sorting gesture. | `(oldIndex: number, newIndex: number) => void` |       - |
 | **draggedItemClassName** |     Class applied to the item being dragged      |                    `string`                    |       - |
 | **allowDrag**            |     Determines whether items can be dragged      |                   `boolean`                    |  `true` |
@@ -98,7 +99,7 @@ const App = () => {
   }
 
   return (
-    <SortableList onSortEnd={onSortEnd} className="list" draggedItemClassName="dragged">
+    <SortableList as="div" onSortEnd={onSortEnd} className="list" draggedItemClassName="dragged">
       {items.map((item) => (
         <SortableItem key={item}>
           <div className="item">
