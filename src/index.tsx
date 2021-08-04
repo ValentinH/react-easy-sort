@@ -5,6 +5,8 @@ import { findItemIndexAtPosition } from './helpers'
 import { useDrag } from './hooks'
 import { Point } from './types'
 
+const DEFAULT_CONTAINER_TAG = 'div'
+
 type Props<TTag extends keyof JSX.IntrinsicElements> = HTMLAttributes<TTag> & {
   children: React.ReactNode
   /** Determines whether drag functionality is enabled, defaults to true */
@@ -14,7 +16,7 @@ type Props<TTag extends keyof JSX.IntrinsicElements> = HTMLAttributes<TTag> & {
   /** Class applied to the item being dragged */
   draggedItemClassName?: string
   /** Determines which type of html tag will be used for a container element */
-  as: TTag
+  as?: TTag
 }
 
 // this context is only used so that SortableItems can register/remove themselves
@@ -27,7 +29,7 @@ type Context = {
 }
 
 const SortableListContext = React.createContext<Context | undefined>(undefined)
-const SortableList = <TTag extends keyof JSX.IntrinsicElements>({ children, allowDrag = true, onSortEnd, draggedItemClassName, as, ...rest }: Props<TTag>) => {
+const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_CONTAINER_TAG>({ children, allowDrag = true, onSortEnd, draggedItemClassName, as, ...rest }: Props<TTag>) => {
   // this array contains the elements than can be sorted (wrapped inside SortableItem)
   const itemsRef = React.useRef<HTMLElement[]>([])
   // this array contains the coordinates of each sortable element (only computed on dragStart and used in dragMove for perf reason)
@@ -252,7 +254,7 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements>({ children, allo
   const context = React.useMemo(() => ({ registerItem, removeItem, registerKnob, removeKnob }), [registerItem, removeItem, registerKnob, removeKnob])
 
   return React.createElement(
-    as, 
+    as || DEFAULT_CONTAINER_TAG, 
     { 
       ...(allowDrag ? listeners : {}),
       ...rest, 
