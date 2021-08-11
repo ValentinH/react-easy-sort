@@ -32,6 +32,7 @@ const useStyles = makeStyles({
   image: {
     width: 150,
     height: 150,
+    pointerEvents: 'none',
   },
   button: {
     position: 'absolute',
