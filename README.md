@@ -74,6 +74,7 @@ const App = () => {
 
 | Name                     |                   Description                    |                      Type                      | Default |
 | ------------------------ | :----------------------------------------------: | :--------------------------------------------: | ------: |
+| **as**                   |     Determines html tag for container element    |         `keyof JSX.IntrinsicElements`          |   `div` |
 | **onSortEnd\***          | Called when the user finishes a sorting gesture. | `(oldIndex: number, newIndex: number) => void` |       - |
 | **draggedItemClassName** |     Class applied to the item being dragged      |                    `string`                    |       - |
 | **allowDrag**            |     Determines whether items can be dragged      |                   `boolean`                    |  `true` |
