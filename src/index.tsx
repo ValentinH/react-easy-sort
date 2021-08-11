@@ -1,8 +1,9 @@
 import arrayMove from 'array-move'
 import React, { HTMLAttributes } from 'react'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { findItemIndexAtPosition } from './helpers'
-import { useDrag } from './hooks'
+import { useAutoScroll, useDrag } from './hooks'
 import { Point } from './types'
 
 const DEFAULT_CONTAINER_TAG = 'div'
@@ -47,14 +48,24 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
   // contains the offset point where the initial drag occurred to be used when dragging the item
   const offsetPointRef = React.useRef<Point>({ x: 0, y: 0 })
 
+  const debouncedOnScroll = useDebouncedCallback(() => {
+    itemsRect.current = itemsRef.current.map((item) => item.getBoundingClientRect())
+  }, 50)
+
+  const { autoScroll, cancelScroll } = useAutoScroll({
+    container: containerRef.current,
+    onScroll: debouncedOnScroll.callback,
+  })
+
   React.useEffect(() => {
     return () => {
       // cleanup the target element from the DOM when SortableList in unmounted
       if (targetRef.current) {
         document.body.removeChild(targetRef.current)
       }
+      debouncedOnScroll.cancel()
     }
-  }, [])
+  }, [debouncedOnScroll])
 
   const updateTargetPosition = (position: Point) => {
     if (targetRef.current) {
@@ -107,7 +118,6 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
       if (!containerRef.current) {
         return
       }
-
       itemsRect.current = itemsRef.current.map((item) => item.getBoundingClientRect())
 
       const sourceIndex = findItemIndexAtPosition(pointInWindow, itemsRect.current)
@@ -187,6 +197,9 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
         // we want the translation to be animated
         currentItem.style.transitionDuration = '300ms'
       }
+      if (targetRef.current) {
+        autoScroll({ draggingRect: targetRef.current.getBoundingClientRect() })
+      }
     },
     onEnd: () => {
       // we reset all items translations (the parent is expected to sort the items in the onSortEnd callback)
@@ -223,6 +236,8 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
         document.body.removeChild(targetRef.current)
         targetRef.current = null
       }
+
+      cancelScroll()
     },
   })
 

@@ -31,3 +31,20 @@ export const findItemIndexAtPosition = (
   }
   return smallestDistanceIndex
 }
+
+function isScrollable(el: Element) {
+  const computedStyle = window.getComputedStyle(el)
+  const overflowRegex = /(auto|scroll)/
+  const properties = ['overflow', 'overflowX', 'overflowY'] as const
+  return properties.find((property) => overflowRegex.test(computedStyle[property]))
+}
+
+export function getScrollingParent(el: Node | null): Element {
+  if (!(el instanceof HTMLElement)) {
+    return document.scrollingElement || document.documentElement
+  } else if (isScrollable(el)) {
+    return el
+  } else {
+    return getScrollingParent(el.parentNode)
+  }
+}

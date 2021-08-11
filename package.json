@@ -44,7 +44,8 @@
   },
   "dependencies": {
     "array-move": "^3.0.1",
-    "tslib": "2.0.1"
+    "tslib": "2.0.1",
+    "use-debounce": "^5.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",

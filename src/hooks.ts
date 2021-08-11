@@ -1,4 +1,5 @@
 import React from 'react'
+import { getScrollingParent } from './helpers'
 
 import { Point } from './types'
 
@@ -255,4 +256,191 @@ export const useDrag = ({ onStart, onMove, onEnd, containerRef, knobs }: UseDrag
   // Touch handlers must be added with {passive: false} to be cancelable.
   // https://developers.google.com/web/updates/2017/01/scrolling-intervention
   return isTouchDevice ? {} : { onMouseDown }
+}
+
+function getScrollElementRect(element: Element) {
+  if (element === document.scrollingElement) {
+    const { innerWidth, innerHeight } = window
+
+    return {
+      top: 0,
+      left: 0,
+      right: innerWidth,
+      bottom: innerHeight,
+      width: innerWidth,
+      height: innerHeight,
+    }
+  }
+
+  return element.getBoundingClientRect()
+}
+
+export function getScrollPosition(scrollingContainer: Element) {
+  const scrollElementRect = getScrollElementRect(scrollingContainer)
+  const minScroll = {
+    x: 0,
+    y: 0,
+  }
+  const maxScroll = {
+    x: scrollingContainer.scrollWidth - scrollElementRect.width,
+    y: scrollingContainer.scrollHeight - scrollElementRect.height,
+  }
+
+  const isTop = scrollingContainer.scrollTop <= minScroll.y
+  const isLeft = scrollingContainer.scrollLeft <= minScroll.x
+  const isBottom = scrollingContainer.scrollTop >= maxScroll.y
+  const isRight = scrollingContainer.scrollLeft >= maxScroll.x
+
+  return {
+    isTop,
+    isLeft,
+    isBottom,
+    isRight,
+    scrollElementRect,
+    maxScroll,
+    minScroll,
+  }
+}
+
+export function getScrollDirectionAndSpeed(
+  scrollContainer: Element,
+  scrollContainerRect: DOMRect,
+  rect: DOMRect,
+  acceleration = 10
+) {
+  const { clientHeight, clientWidth } = scrollContainer
+  const finalScrollContainerRect =
+    scrollContainer === document.scrollingElement
+      ? {
+          top: 0,
+          left: 0,
+          right: clientWidth,
+          bottom: clientHeight,
+        }
+      : scrollContainerRect
+  const { isTop, isBottom, isLeft, isRight } = getScrollPosition(scrollContainer)
+  const { width, height, left, top, bottom, right } = rect
+  const direction = {
+    x: 0,
+    y: 0,
+  }
+  const speed = {
+    x: 0,
+    y: 0,
+  }
+
+  if (!isTop && top <= finalScrollContainerRect.top + height) {
+    // Scroll Up
+    direction.y = -1
+    speed.y = acceleration * Math.abs((top - height - finalScrollContainerRect.top) / height)
+  } else if (!isBottom && bottom >= finalScrollContainerRect.bottom - height) {
+    // Scroll Down
+    direction.y = 1
+    speed.y = acceleration * Math.abs((finalScrollContainerRect.bottom - height - bottom) / height)
+  }
+
+  if (!isRight && right >= finalScrollContainerRect.right - width) {
+    // Scroll Right
+    direction.x = 1
+    speed.x = acceleration * Math.abs((finalScrollContainerRect.right - width - right) / width)
+  } else if (!isLeft && left <= finalScrollContainerRect.left + width) {
+    // Scroll Left
+    direction.x = -1
+    speed.x = acceleration * Math.abs((left - width - finalScrollContainerRect.left) / width)
+  }
+
+  return {
+    direction,
+    speed,
+  }
+}
+
+export function useInterval() {
+  const intervalRef = React.useRef<number | null>(null)
+
+  const set = React.useCallback((listener: Function, duration: number) => {
+    intervalRef.current = setInterval(listener, duration)
+  }, [])
+
+  const clear = React.useCallback(() => {
+    if (intervalRef.current !== null) {
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
+    }
+  }, [])
+
+  return [set, clear] as const
+}
+
+// helpers functions are taken from https://github.com/clauderic/dnd-kit
+type UseAutoScrollProps = {
+  container: Element | null
+  onScroll?: () => void
+}
+
+export const useAutoScroll = ({ container, onScroll }: UseAutoScrollProps) => {
+  // contains the scrollable element
+  const scrollableRef = React.useRef<Element | null>(null)
+  const [setInterval, clearInterval] = useInterval()
+
+  React.useEffect(() => {
+    scrollableRef.current = getScrollingParent(container)
+    return () => {
+      clearInterval()
+    }
+  }, [container, clearInterval])
+
+  const scrollSpeed = React.useRef<Point>({
+    x: 1,
+    y: 1,
+  })
+  const scrollDirection = React.useRef<Point>({ x: 1, y: 1 })
+
+  const scroll = React.useCallback(() => {
+    const scrollContainer = scrollableRef.current
+
+    if (!scrollContainer) {
+      return
+    }
+
+    const scrollLeft = scrollSpeed.current.x * scrollDirection.current.x
+    const scrollTop = scrollSpeed.current.y * scrollDirection.current.y
+
+    scrollContainer.scrollBy(scrollLeft, scrollTop)
+    if (onScroll) {
+      onScroll()
+    }
+  }, [onScroll])
+
+  const autoScroll = React.useCallback(
+    ({ draggingRect }: { draggingRect: DOMRect }) => {
+      const scrollable = scrollableRef.current
+      if (!scrollable) {
+        console.error('scrollable is null')
+        return
+      }
+
+      const { direction, speed } = getScrollDirectionAndSpeed(
+        scrollable,
+        scrollable.getBoundingClientRect(),
+        draggingRect
+      )
+
+      scrollSpeed.current = speed
+      scrollDirection.current = direction
+
+      clearInterval()
+
+      if (speed.x > 0 || speed.y > 0) {
+        setInterval(scroll, 5)
+      }
+    },
+    [clearInterval, setInterval, scroll]
+  )
+
+  const cancelScroll = React.useCallback(() => {
+    clearInterval()
+  }, [clearInterval])
+
+  return { autoScroll, cancelScroll }
 }
