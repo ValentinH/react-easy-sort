@@ -260,9 +260,7 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
       ...rest, 
       ref: containerRef
     },
-    [
-      <SortableListContext.Provider value={context}>{children}</SortableListContext.Provider>
-    ]
+    <SortableListContext.Provider value={context}>{children}</SortableListContext.Provider>
   ) 
 }
 
