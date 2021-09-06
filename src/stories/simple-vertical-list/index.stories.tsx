@@ -1,17 +1,31 @@
 import React from 'react'
 import arrayMove from 'array-move'
 
-import { withKnobs, number } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
+import { Story } from '@storybook/react'
 
 import SortableList, { SortableItem } from '../../index'
 import { generateItems } from '../helpers'
 import { makeStyles } from '@material-ui/core'
 
 export default {
-  title: 'react-easy-sort/Simple vertical list',
   component: SortableList,
-  decorators: [withKnobs],
+  title: 'react-easy-sort/Simple vertical list',
+  parameters: {
+    componentSubtitle: 'SortableList',
+  },
+  argTypes: {
+    count: {
+      name: 'Number of elements',
+      control: {
+        type: 'range',
+        min: 3,
+        max: 12,
+        step: 1,
+      },
+      defaultValue: 3,
+    },
+  },
 }
 
 const useStyles = makeStyles({
@@ -36,9 +50,12 @@ const useStyles = makeStyles({
   },
 })
 
-export const Demo = () => {
+type StoryProps = {
+  count: number
+}
+
+export const Demo: Story<StoryProps> = ({ count }: StoryProps) => {
   const classes = useStyles()
-  const count = number('Items', 9, { min: 3, max: 12, range: true })
 
   const [items, setItems] = React.useState<string[]>([])
   React.useEffect(() => {
