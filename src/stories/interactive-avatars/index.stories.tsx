@@ -1,16 +1,30 @@
 import React from 'react'
 import arrayMove from 'array-move'
 
-import { withKnobs } from '@storybook/addon-knobs'
+import { Story } from '@storybook/react'
 
 import SortableList, { SortableItem } from '../../index'
 import { Avatar, Fab, makeStyles } from '@material-ui/core'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 
 export default {
-  title: 'react-easy-sort/Interactive avatars',
   component: SortableList,
-  decorators: [withKnobs],
+  title: 'react-easy-sort/Interactive avatars',
+  parameters: {
+    componentSubtitle: 'SortableList',
+  },
+  argTypes: {
+    count: {
+      name: 'Number of elements',
+      control: {
+        type: 'range',
+        min: 3,
+        max: 12,
+        step: 1,
+      },
+      defaultValue: 8,
+    },
+  },
 }
 
 const useStyles = makeStyles({
@@ -48,7 +62,11 @@ const useStyles = makeStyles({
   },
 })
 
-export const Demo = () => {
+type StoryProps = {
+  count: number
+}
+
+export const Demo: Story<StoryProps> = ({ count }: StoryProps) => {
   const classes = useStyles()
   const [items, setItems] = React.useState([
     {
@@ -89,6 +107,20 @@ export const Demo = () => {
       image:
         'https://img.huffingtonpost.com/asset/5ab4d4ac2000007d06eb2c56.jpeg?cache=sih0jwle4e&ops=282_200',
     },
+    {
+      name: 'India',
+      image:
+        'https://www.petmoo.com/wp-content/uploads/2018/08/Happy-Puppies-Questions-990x556.jpg',
+    },
+    {
+      name: 'Kilo',
+      image:
+        'https://s36700.pcdn.co/wp-content/uploads/2017/08/A-happy-puppy-lying-in-the-grass-outside-600x400.jpg.optimal.jpg',
+    },
+    {
+      name: 'Lima',
+      image: 'https://static.parade.com/wp-content/uploads/2021/03/Top-10-Puppy-Names-of-2021.jpg',
+    },
   ])
 
   const onSortEnd = (oldIndex: number, newIndex: number) => {
@@ -101,7 +133,7 @@ export const Demo = () => {
       className={classes.root}
       draggedItemClassName={classes.dragged}
     >
-      {items.map(({ name, image }) => (
+      {items.slice(0, count).map(({ name, image }) => (
         <SortableItem key={name}>
           <div className={classes.item}>
             <Avatar
