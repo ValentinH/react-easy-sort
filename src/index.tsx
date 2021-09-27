@@ -93,6 +93,11 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
       copy.style.top = '0'
       copy.style.left = '0'
 
+      const sourceCanvases = source.querySelectorAll('canvas');
+      copy.querySelectorAll('canvas').forEach((canvas, index) => {
+        canvas.getContext('2d')?.drawImage(sourceCanvases[index], 0, 0);
+      });
+
       document.body.appendChild(copy)
 
       targetRef.current = copy

@@ -1,6 +1,6 @@
 {
-  "name": "react-easy-sort",
-  "version": "1.3.1",
+  "name": "@notdutzi/react-easy-sort",
+  "version": "1.3.5",
   "description": "A React component to sort items in lists or grids",
   "homepage": "https://ricardo-ch.github.io/react-easy-sort/",
   "keywords": [
@@ -15,7 +15,8 @@
     "url": "https://github.com/ricardo-ch/react-easy-sort"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "author": "Ricardo.ch",
   "license": "MIT",
