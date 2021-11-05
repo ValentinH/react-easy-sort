@@ -3,7 +3,7 @@ import arrayMove from 'array-move'
 
 import { Story } from '@storybook/react'
 
-import SortableList, { SortableItem } from '../../index'
+import SortableList, { SortableItem } from '../../src/index'
 import { Avatar, Fab, makeStyles } from '@material-ui/core'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 

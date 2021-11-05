@@ -4,13 +4,13 @@ import arrayMove from 'array-move'
 import { action } from '@storybook/addon-actions'
 import { Story } from '@storybook/react'
 
-import SortableList, { SortableItem } from '../../index'
+import SortableList, { SortableItem } from '../../src/index'
 import { generateItems } from '../helpers'
 import { makeStyles } from '@material-ui/core'
 
 export default {
   component: SortableList,
-  title: 'react-easy-sort/Simple vertical list',
+  title: 'react-easy-sort/Simple horizontal list',
   parameters: {
     componentSubtitle: 'SortableList',
   },
@@ -32,6 +32,8 @@ const useStyles = makeStyles({
   list: {
     fontFamily: 'Helvetica, Arial, sans-serif',
     userSelect: 'none',
+    display: 'flex',
+    justifyContent: 'flex-start',
   },
   item: {
     flexShrink: 0,
@@ -41,8 +43,8 @@ const useStyles = makeStyles({
     backgroundColor: 'rgb(84, 84, 241)',
     color: 'white',
     margin: 8,
-    width: 150,
-    height: 34,
+    width: 60,
+    height: 60,
     cursor: 'grab',
   },
   dragged: {
