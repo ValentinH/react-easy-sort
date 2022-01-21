@@ -166,24 +166,34 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
       lastTargetIndexRef.current = targetIndex
 
       const isMovingRight = sourceIndex < targetIndex
+      const draggedItemRects = itemsRect.current[sourceIndex]
+      const nextItemRects = itemsRect.current[isMovingRight ? sourceIndex + 1 : sourceIndex - 1]
+
+      if (nextItemRects === undefined) {
+        return
+      }
+
+      const spacingY = isMovingRight
+        ? (nextItemRects?.top ?? 0) - draggedItemRects.bottom
+        : draggedItemRects.top - (nextItemRects?.bottom ?? 0)
+
+      const spacingX = isMovingRight
+        ? (nextItemRects?.left ?? 0) - draggedItemRects.right
+        : draggedItemRects.left - (nextItemRects?.right ?? 0)
+
+      const translateX = (isMovingRight ? -1 : 1) * (draggedItemRects.width + spacingX)
+      const translateY = (isMovingRight ? -1 : 1) * (draggedItemRects.height + spacingY)
 
       // in this loop, we go over each sortable item and see if we need to update their position
       for (let index = 0; index < itemsRef.current.length; index += 1) {
         const currentItem = itemsRef.current[index]
-        const currentItemRect = itemsRect.current[index]
         // if current index is between sourceIndex and targetIndex, we need to translate them
         if (
           (isMovingRight && index >= sourceIndex && index <= targetIndex) ||
           (!isMovingRight && index >= targetIndex && index <= sourceIndex)
         ) {
-          // we need to move the item to the previous or next item position
-          const nextItemRects = itemsRect.current[isMovingRight ? index - 1 : index + 1]
-          if (nextItemRects) {
-            const translateX = nextItemRects.left - currentItemRect.left
-            const translateY = nextItemRects.top - currentItemRect.top
-            // we use `translate3d` to force using the GPU if available
-            currentItem.style.transform = `translate3d(${translateX}px, ${translateY}px, 0px)`
-          }
+          // we use `translate3d` to force using the GPU if available
+          currentItem.style.transform = `translate3d(${translateX}px, ${translateY}px, 0px)`
         }
         // otherwise, the item should be at its original position
         else {
