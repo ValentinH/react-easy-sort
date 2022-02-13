@@ -17,6 +17,8 @@ type Props<TTag extends keyof JSX.IntrinsicElements> = HTMLAttributes<TTag> & {
   draggedItemClassName?: string
   /** Determines which type of html tag will be used for a container element */
   as?: TTag
+  /** Determines if an axis should be locked */
+  lockAxis?: 'x' | 'y'
 }
 
 // this context is only used so that SortableItems can register/remove themselves
@@ -24,18 +26,26 @@ type Props<TTag extends keyof JSX.IntrinsicElements> = HTMLAttributes<TTag> & {
 type Context = {
   registerItem: (item: HTMLElement) => void
   removeItem: (item: HTMLElement) => void
-  registerKnob:  (item: HTMLElement) => void
-  removeKnob:  (item: HTMLElement) => void
+  registerKnob: (item: HTMLElement) => void
+  removeKnob: (item: HTMLElement) => void
 }
 
 const SortableListContext = React.createContext<Context | undefined>(undefined)
-const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_CONTAINER_TAG>({ children, allowDrag = true, onSortEnd, draggedItemClassName, as, ...rest }: Props<TTag>) => {
+const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_CONTAINER_TAG>({
+  children,
+  allowDrag = true,
+  onSortEnd,
+  draggedItemClassName,
+  as,
+  lockAxis,
+  ...rest
+}: Props<TTag>) => {
   // this array contains the elements than can be sorted (wrapped inside SortableItem)
   const itemsRef = React.useRef<HTMLElement[]>([])
   // this array contains the coordinates of each sortable element (only computed on dragStart and used in dragMove for perf reason)
   const itemsRect = React.useRef<DOMRect[]>([])
   // Hold all registered knobs
-  const knobs = React.useRef<HTMLElement[]>([]);
+  const knobs = React.useRef<HTMLElement[]>([])
   // contains the container element
   const containerRef = React.useRef<HTMLElement | null>(null)
   // contains the target element (copy of the source element)
@@ -57,13 +67,14 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
   }, [])
 
   const updateTargetPosition = (position: Point) => {
-    if (targetRef.current) {
+    if (targetRef.current && sourceIndexRef.current !== undefined) {
       const offset = offsetPointRef.current
+      const sourceRect = itemsRect.current[sourceIndexRef.current]
+      const newX = lockAxis === 'y' ? sourceRect.left : position.x - offset.x
+      const newY = lockAxis === 'x' ? sourceRect.top : position.y - offset.y
 
       // we use `translate3d` to force using the GPU if available
-      targetRef.current.style.transform = `translate3d(${position.x - offset.x}px, ${
-        position.y - offset.y
-      }px, 0px)`
+      targetRef.current.style.transform = `translate3d(${newX}px, ${newY}px, 0px)`
     }
   }
 
@@ -93,10 +104,10 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
       copy.style.top = '0'
       copy.style.left = '0'
 
-      const sourceCanvases = source.querySelectorAll('canvas');
+      const sourceCanvases = source.querySelectorAll('canvas')
       copy.querySelectorAll('canvas').forEach((canvas, index) => {
-        canvas.getContext('2d')?.drawImage(sourceCanvases[index], 0, 0);
-      });
+        canvas.getContext('2d')?.drawImage(sourceCanvases[index], 0, 0)
+      })
 
       document.body.appendChild(copy)
 
@@ -151,11 +162,17 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
 
       const sourceIndex = sourceIndexRef.current
       // if there is no source, we exit early (happened when drag gesture was started outside a SortableItem)
-      if (sourceIndex === undefined) {
+      if (sourceIndex === undefined || sourceIndexRef.current === undefined) {
         return
       }
 
-      const targetIndex = findItemIndexAtPosition(pointInWindow, itemsRect.current, {
+      const sourceRect = itemsRect.current[sourceIndexRef.current]
+      const targetPoint: Point = {
+        x: lockAxis === 'y' ? sourceRect.left : pointInWindow.x,
+        y: lockAxis === 'x' ? sourceRect.top : pointInWindow.y,
+      }
+
+      const targetIndex = findItemIndexAtPosition(targetPoint, itemsRect.current, {
         fallbackToClosest: true,
       })
       // if not target detected, we don't need to update other items' position
@@ -256,17 +273,22 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
 
   // we need to memoize the context to avoid re-rendering every children of the context provider
   // when not needed
-  const context = React.useMemo(() => ({ registerItem, removeItem, registerKnob, removeKnob }), [registerItem, removeItem, registerKnob, removeKnob])
+  const context = React.useMemo(() => ({ registerItem, removeItem, registerKnob, removeKnob }), [
+    registerItem,
+    removeItem,
+    registerKnob,
+    removeKnob,
+  ])
 
   return React.createElement(
-    as || DEFAULT_CONTAINER_TAG, 
-    { 
+    as || DEFAULT_CONTAINER_TAG,
+    {
       ...(allowDrag ? listeners : {}),
-      ...rest, 
-      ref: containerRef
+      ...rest,
+      ref: containerRef,
     },
     <SortableListContext.Provider value={context}>{children}</SortableListContext.Provider>
-  ) 
+  )
 }
 
 export default SortableList
@@ -303,14 +325,14 @@ export const SortableItem = ({ children }: ItemProps) => {
   return React.cloneElement(children, { ref: elementRef })
 }
 
-export const SortableKnob = ({ children  }: ItemProps) => {
+export const SortableKnob = ({ children }: ItemProps) => {
   const context = React.useContext(SortableListContext)
 
   if (!context) {
     throw new Error('SortableKnob must be a child of SortableList')
   }
 
-  const { registerKnob, removeKnob } = context;
+  const { registerKnob, removeKnob } = context
 
   const elementRef = React.useRef<HTMLElement | null>(null)
 
@@ -330,4 +352,4 @@ export const SortableKnob = ({ children  }: ItemProps) => {
   }, [registerKnob, removeKnob, children])
 
   return React.cloneElement(children, { ref: elementRef })
-};
+}
