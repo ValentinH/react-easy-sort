@@ -23,7 +23,7 @@ To install the project you need to have `yarn` and `node`
 > pull requests from branches on your fork. To do this, run:
 >
 > ```
-> git remote add upstream git@github.com:ricardo-ch/react-easy-sort.git
+> git remote add upstream git@github.com:ValentinH/react-easy-sort.git
 > git fetch upstream
 > git branch --set-upstream-to=upstream/main main
 > ```

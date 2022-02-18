@@ -1,6 +1,11 @@
 import { addons } from '@storybook/addons'
-import ricardoTheme from './RicardoTheme'
+import { create } from '@storybook/theming'
+
+const theme = create({
+  base: 'light',
+  brandTitle: 'react-easy-sort',
+})
 
 addons.setConfig({
-  theme: ricardoTheme,
+  theme,
 })

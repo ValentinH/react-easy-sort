@@ -136,7 +136,14 @@ Now, open `http://localhost:3001/index.html` and start hacking!
 
 ## License
 
-[MIT](https://github.com/ricardo-ch/react-easy-sort/blob/master/LICENSE)
+[MIT](https://github.com/ValentinH/react-easy-sort/blob/master/LICENSE)
+
+## Maintainers
+
+This project is maintained by Valentin Hervieu.
+
+This project was originally part of [@ricardo-ch](https://github.com/ricardo-ch/) organisation because I (Valentin) was working at Ricardo.
+After leaving this company, they gracefully accepted to transfer the project to me. ❤️
 
 ## Alternatives
 
@@ -152,6 +159,6 @@ Now, open `http://localhost:3001/index.html` and start hacking!
 [npmstats-badge]: https://img.shields.io/npm/dm/react-easy-sort.svg?style=flat-square
 [gzip-badge]: http://img.badgesize.io/https://unpkg.com/react-easy-sort/umd/react-easy-sort.min.js?compression=gzip&style=flat-square&1
 [license-badge]: https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
-[license]: https://github.com/ricardo-ch/react-easy-sort/blob/main/LICENSE
+[license]: https://github.com/ValentinH/react-easy-sort/blob/main/LICENSE
 [prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
 [prs]: http://makeapullrequest.com

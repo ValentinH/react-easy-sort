@@ -2,7 +2,7 @@
   "name": "react-easy-sort",
   "version": "1.4.0",
   "description": "A React component to sort items in lists or grids",
-  "homepage": "https://ricardo-ch.github.io/react-easy-sort/",
+  "homepage": "https://ValentinH.github.io/react-easy-sort/",
   "keywords": [
     "react",
     "sort",
@@ -12,12 +12,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ricardo-ch/react-easy-sort"
+    "url": "https://github.com/ValentinH/react-easy-sort"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
-  "author": "Ricardo.ch",
+  "author": "Valentin Hervieu",
   "license": "MIT",
   "sideEffects": false,
   "scripts": {
