@@ -33,7 +33,7 @@
     "build:copy-files": "babel-node ./scripts/copy-build-files.js",
     "prepublishOnly": "yarn-or-npm build",
     "precommit": "lint-staged",
-    "format": "prettier --write src/**/*.ts*",
+    "format": "prettier --write src/**/*.ts* stories/**/*.ts*",
     "npm:publish": "np --contents=dist",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook -o ./docs"
