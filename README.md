@@ -2,7 +2,7 @@
 
 A React component to sort items in lists or grids
 
-[![version][version-badge]][package] [![Monthly downloads][npmstats-badge]][npmstats] ![gzip size][gzip-badge] [![MIT License][license-badge]][license] [![PRs Welcome][prs-badge]][prs]
+[![version][version-badge]][package] [![Monthly downloads][npmstats-badge]][npmstats] ![gzip size][brotli-badge] [![MIT License][license-badge]][license] [![PRs Welcome][prs-badge]][prs]
 
 ![react-easy-sort-demo](https://user-images.githubusercontent.com/2678610/107036435-f27fbb00-67b9-11eb-8e3f-72a000586d35.gif)
 
@@ -11,7 +11,7 @@ The goal of this component is to allow sorting elements with drag and drop.
 It is mobile friendly by default. It doesn't block scrolling the page when swiping inside it:
 the user needs to press an item during at least 200ms to start the drag gesture.
 
-On non-touch device, the drag gesture only starts after moving an element by at least one pixel.
+On non-touch devices, the drag gesture only starts after moving an element by at least one pixel.
 This is done to avoid blocking clicks on clickable elements inside an item.
 
 ## Features
@@ -74,7 +74,7 @@ const App = () => {
 
 | Name                     |                   Description                    |                      Type                      | Default |
 | ------------------------ | :----------------------------------------------: | :--------------------------------------------: | ------: |
-| **as**                   |    Determines html tag for container element     |         `keyof JSX.IntrinsicElements`          |   `div` |
+| **as**                   |    Determines html tag for the container element     |         `keyof JSX.IntrinsicElements`          |   `div` |
 | **onSortEnd\***          | Called when the user finishes a sorting gesture. | `(oldIndex: number, newIndex: number) => void` |       - |
 | **draggedItemClassName** |     Class applied to the item being dragged      |                    `string`                    |       - |
 | **lockAxis**             |      Determines if an axis should be locked      |                 `'x'` or `'y'`                 |         |
@@ -86,7 +86,7 @@ This component doesn't take any other props than its child. This child should be
 
 ### SortableKnob
 
-You can use this component if you doesn't want to whole item to be draggable but only a specific area of it.
+You can use this component if you don't want the whole item to be draggable but only a specific area of it.
 
 ```js
 import SortableList, { SortableItem, SortableKnob } from 'react-easy-sort'
@@ -116,11 +116,11 @@ const App = () => {
 }
 ```
 
-This component doesn't take any other props than its child. This child should be a single React element that can receives a ref. If you pass a component as a child, it needs to be wrapped with `React.forwardRef()`.
+This component doesn't take any other props than its child. This child should be a single React element that can receive a ref. If you pass a component as a child, it needs to be wrapped with `React.forwardRef()`.
 
 ## Recommended CSS rules
 
-To disable browser default behaviors than can interfer with the dragging experience, we recommend adding the following declarations on the "items":
+To disable browser default behaviors that can interfer with the dragging experience, we recommend adding the following declarations on the "items":
 
 - `user-select: none;`: disable the selection of content inside the item (the blue box)
 - `pointer-events: none;`: required for some browsers if your items contain images (see the [Interactive avatars demo](https://codesandbox.io/s/react-easy-sort-images-demo-486qk))
@@ -157,7 +157,7 @@ After leaving this company, they gracefully accepted to transfer the project to 
 [downloads-badge]: https://img.shields.io/npm/dm/react-easy-sort.svg?style=flat-square
 [npmstats]: https://npm-stat.com/charts.html?package=react-easy-sort&from=2021-02-01
 [npmstats-badge]: https://img.shields.io/npm/dm/react-easy-sort.svg?style=flat-square
-[gzip-badge]: http://img.badgesize.io/https://unpkg.com/react-easy-sort/umd/react-easy-sort.min.js?compression=gzip&style=flat-square&1
+[brotli-badge]: http://img.badgesize.io/https://unpkg.com/react-easy-sort/umd/react-easy-sort.min.js?compression=brotli&style=flat-square&1
 [license-badge]: https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
 [license]: https://github.com/ValentinH/react-easy-sort/blob/main/LICENSE
 [prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
