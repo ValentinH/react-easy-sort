@@ -19,6 +19,8 @@ type Props<TTag extends keyof JSX.IntrinsicElements> = HTMLAttributes<TTag> & {
   as?: TTag
   /** Determines if an axis should be locked */
   lockAxis?: 'x' | 'y'
+  /** Reference to the Custom Holder element */
+  customHolderRef?: React.RefObject<HTMLElement | null>
 }
 
 // this context is only used so that SortableItems can register/remove themselves
@@ -38,6 +40,7 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
   draggedItemClassName,
   as,
   lockAxis,
+  customHolderRef,
   ...rest
 }: Props<TTag>) => {
   // this array contains the elements than can be sorted (wrapped inside SortableItem)
@@ -58,13 +61,14 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
   const offsetPointRef = React.useRef<Point>({ x: 0, y: 0 })
 
   React.useEffect(() => {
+    const holder = (customHolderRef?.current || document.body)
     return () => {
       // cleanup the target element from the DOM when SortableList in unmounted
       if (targetRef.current) {
-        document.body.removeChild(targetRef.current)
+        holder.removeChild(targetRef.current)
       }
     }
-  }, [])
+  }, [customHolderRef])
 
   const updateTargetPosition = (position: Point) => {
     if (targetRef.current && sourceIndexRef.current !== undefined) {
@@ -109,11 +113,12 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
         canvas.getContext('2d')?.drawImage(sourceCanvases[index], 0, 0)
       })
 
-      document.body.appendChild(copy)
+      const holder = (customHolderRef?.current || document.body)
+      holder.appendChild(copy)
 
       targetRef.current = copy
     },
-    [draggedItemClassName]
+    [customHolderRef, draggedItemClassName]
   )
 
   const listeners = useDrag({
@@ -242,7 +247,8 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
 
       // cleanup the target element from the DOM
       if (targetRef.current) {
-        document.body.removeChild(targetRef.current)
+        const holder = (customHolderRef?.current || document.body)
+        holder.removeChild(targetRef.current)
         targetRef.current = null
       }
     },
