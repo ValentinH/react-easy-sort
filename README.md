@@ -72,13 +72,14 @@ const App = () => {
 
 ### SortableList
 
-| Name                     |                   Description                    |                      Type                      | Default |
-| ------------------------ | :----------------------------------------------: | :--------------------------------------------: | ------: |
-| **as**                   |    Determines html tag for the container element     |         `keyof JSX.IntrinsicElements`          |   `div` |
-| **onSortEnd\***          | Called when the user finishes a sorting gesture. | `(oldIndex: number, newIndex: number) => void` |       - |
-| **draggedItemClassName** |     Class applied to the item being dragged      |                    `string`                    |       - |
-| **lockAxis**             |      Determines if an axis should be locked      |                 `'x'` or `'y'`                 |         |
-| **allowDrag**            |     Determines whether items can be dragged      |                   `boolean`                    |  `true` |
+| Name                     |                         Description                          |                      Type                      |         Default |
+| ------------------------ | :----------------------------------------------------------: | :--------------------------------------------: | --------------: |
+| **as**                   |        Determines html tag for the container element         |         `keyof JSX.IntrinsicElements`          |           `div` |
+| **onSortEnd\***          |       Called when the user finishes a sorting gesture.       | `(oldIndex: number, newIndex: number) => void` |               - |
+| **draggedItemClassName** |           Class applied to the item being dragged            |                    `string`                    |               - |
+| **lockAxis**             |            Determines if an axis should be locked            |                 `'x'` or `'y'`                 |                 |
+| **allowDrag**            |           Determines whether items can be dragged            |                   `boolean`                    |          `true` |
+| **customHolderRef**      | Ref of an element to use as a container for the dragged item |     `React.RefObject<HTMLElement \| null>`     | `document.body` |
 
 ### SortableItem
 
