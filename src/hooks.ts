@@ -231,16 +231,12 @@ export const useDrag = ({
           capture: false,
           passive: false,
         })
-      } else {
-        container?.removeEventListener('touchstart', onTouchStart, { capture: true })
-        document.removeEventListener('touchmove', touchScrollListener, { capture: false })
-        document.removeEventListener('touchend', touchScrollListener, { capture: false })
       }
 
       return () => {
-        container?.removeEventListener('touchstart', onTouchStart)
-        document.removeEventListener('touchmove', touchScrollListener)
-        document.removeEventListener('touchend', touchScrollListener)
+        container?.removeEventListener('touchstart', onTouchStart, { capture: true })
+        document.removeEventListener('touchmove', touchScrollListener, { capture: false })
+        document.removeEventListener('touchend', touchScrollListener, { capture: false })
         document.removeEventListener('touchmove', onTouchMove)
         document.removeEventListener('touchend', onTouchEnd)
         enableContextMenu()
