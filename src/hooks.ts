@@ -217,7 +217,7 @@ export const useDrag = ({
     if (isTouchDevice) {
       const container = containerRef.current
 
-      if (!allowDrag) {
+      if (allowDrag) {
         container?.addEventListener('touchstart', onTouchStart, { capture: true, passive: false })
         // we are adding this touchmove listener to cancel drag if user is scrolling
         // however, it's also important to have a touchmove listener always set
