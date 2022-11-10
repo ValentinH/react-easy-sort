@@ -61,7 +61,7 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
   const offsetPointRef = React.useRef<Point>({ x: 0, y: 0 })
 
   React.useEffect(() => {
-    const holder = (customHolderRef?.current || document.body)
+    const holder = customHolderRef?.current || document.body
     return () => {
       // cleanup the target element from the DOM when SortableList in unmounted
       if (targetRef.current) {
@@ -113,7 +113,7 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
         canvas.getContext('2d')?.drawImage(sourceCanvases[index], 0, 0)
       })
 
-      const holder = (customHolderRef?.current || document.body)
+      const holder = customHolderRef?.current || document.body
       holder.appendChild(copy)
 
       targetRef.current = copy
@@ -122,6 +122,7 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
   )
 
   const listeners = useDrag({
+    allowDrag,
     containerRef,
     knobs: knobs.current,
     onStart: ({ pointInWindow }) => {
@@ -247,7 +248,7 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
 
       // cleanup the target element from the DOM
       if (targetRef.current) {
-        const holder = (customHolderRef?.current || document.body)
+        const holder = customHolderRef?.current || document.body
         holder.removeChild(targetRef.current)
         targetRef.current = null
       }

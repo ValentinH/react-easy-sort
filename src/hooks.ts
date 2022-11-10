@@ -38,11 +38,19 @@ type UseDragProps = {
   onStart?: (args: OnStartArgs) => void
   onMove?: (args: OnMoveArgs) => void
   onEnd?: () => void
+  allowDrag?: boolean
   containerRef: React.MutableRefObject<HTMLElement | null>
   knobs?: HTMLElement[]
 }
 
-export const useDrag = ({ onStart, onMove, onEnd, containerRef, knobs }: UseDragProps) => {
+export const useDrag = ({
+  onStart,
+  onMove,
+  onEnd,
+  allowDrag = true,
+  containerRef,
+  knobs,
+}: UseDragProps) => {
   // contains the top-left coordinates of the container in the window. Set on drag start and used in drag move
   const containerPositionRef = React.useRef<Point>({ x: 0, y: 0 })
   // on touch devices, we only start the drag gesture after pressing the item 200ms.
@@ -208,24 +216,27 @@ export const useDrag = ({ onStart, onMove, onEnd, containerRef, knobs }: UseDrag
   React.useLayoutEffect(() => {
     if (isTouchDevice) {
       const container = containerRef.current
-      container?.addEventListener('touchstart', onTouchStart, { capture: true, passive: false })
-      // we are adding this touchmove listener to cancel drag if user is scrolling
-      // however, it's also important to have a touchmove listener always set
-      // with non-capture and non-passive option to prevent an issue on Safari
-      // with e.preventDefault (https://github.com/atlassian/react-beautiful-dnd/issues/1374)
-      document.addEventListener('touchmove', touchScrollListener, {
-        capture: false,
-        passive: false,
-      })
-      document.addEventListener('touchend', touchScrollListener, {
-        capture: false,
-        passive: false,
-      })
+
+      if (allowDrag) {
+        container?.addEventListener('touchstart', onTouchStart, { capture: true, passive: false })
+        // we are adding this touchmove listener to cancel drag if user is scrolling
+        // however, it's also important to have a touchmove listener always set
+        // with non-capture and non-passive option to prevent an issue on Safari
+        // with e.preventDefault (https://github.com/atlassian/react-beautiful-dnd/issues/1374)
+        document.addEventListener('touchmove', touchScrollListener, {
+          capture: false,
+          passive: false,
+        })
+        document.addEventListener('touchend', touchScrollListener, {
+          capture: false,
+          passive: false,
+        })
+      }
 
       return () => {
-        container?.removeEventListener('touchstart', onTouchStart)
-        document.removeEventListener('touchmove', touchScrollListener)
-        document.removeEventListener('touchend', touchScrollListener)
+        container?.removeEventListener('touchstart', onTouchStart, { capture: true })
+        document.removeEventListener('touchmove', touchScrollListener, { capture: false })
+        document.removeEventListener('touchend', touchScrollListener, { capture: false })
         document.removeEventListener('touchmove', onTouchMove)
         document.removeEventListener('touchend', onTouchEnd)
         enableContextMenu()
@@ -241,6 +252,7 @@ export const useDrag = ({ onStart, onMove, onEnd, containerRef, knobs }: UseDrag
     }
   }, [
     isTouchDevice,
+    allowDrag,
     detectTouchDevice,
     onMouseMove,
     onTouchMove,
