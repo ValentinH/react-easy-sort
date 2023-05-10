@@ -47,13 +47,13 @@ npm install react-easy-sort --save
 
 ```js
 import SortableList, { SortableItem } from 'react-easy-sort'
-import arrayMove from 'array-move'
+import { arrayMoveImmutable } from 'array-move';
 
 const App = () => {
   const [items, setItems] = React.useState(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'])
 
   const onSortEnd = (oldIndex: number, newIndex: number) => {
-    setItems((array) => arrayMove(array, oldIndex, newIndex))
+    setItems((array) => arrayMoveImmutable(array, oldIndex, newIndex))
   }
 
   return (
