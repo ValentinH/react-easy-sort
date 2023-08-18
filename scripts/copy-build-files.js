@@ -23,9 +23,9 @@ async function createPackageFile() {
     module: './index.module.js',
     'jsnext:main': './index.module.js',
     'react-native': './index.module.js',
-    types: './index.d.ts',
     exports: {
       '.': {
+        types: "./index.d.ts",
         import: './index.module.js',
         require: './index.js',
       },
