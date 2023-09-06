@@ -79,7 +79,7 @@
     "eslint-plugin-react-hooks": "4.1.2",
     "jest": "26.4.2",
     "lint-staged": "^10.4.0",
-    "np": "^6.5.0",
+    "np": "^8.0.4",
     "prettier": "^2.1.2",
     "query-string": "^6.1.0",
     "raw-loader": "^4.0.1",
