@@ -313,6 +313,7 @@ export const usePlaceholder = (content?: React.ReactNode): UsePlaceholderProps =
   const PlaceholderWrapper = (): React.ReactElement => {
     return React.createElement('span', {
       ref: placeholderRef,
+      ariaHidden: true,
       style: {
         opacity: 0,
         visibility: 'hidden',
