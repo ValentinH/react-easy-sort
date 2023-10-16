@@ -21,6 +21,8 @@ type Props<TTag extends keyof JSX.IntrinsicElements> = HTMLAttributes<TTag> & {
   lockAxis?: 'x' | 'y'
   /** Reference to the Custom Holder element */
   customHolderRef?: React.RefObject<HTMLElement | null>
+  /** Placeholder to be used when dragging */
+  placeholder?: React.ReactElement
 }
 
 // this context is only used so that SortableItems can register/remove themselves
@@ -41,6 +43,7 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
   as,
   lockAxis,
   customHolderRef,
+  placeholder,
   ...rest
 }: Props<TTag>) => {
   // this array contains the elements than can be sorted (wrapped inside SortableItem)
@@ -59,6 +62,10 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
   const lastTargetIndexRef = React.useRef<number | undefined>(undefined)
   // contains the offset point where the initial drag occurred to be used when dragging the item
   const offsetPointRef = React.useRef<Point>({ x: 0, y: 0 })
+  // contains the placeholder element
+  const placeholderRef = React.useRef<HTMLElement | null>(null)
+  // Contains the index in the itemsRef of the placeholder element
+  const placeholderIndexRef = React.useRef<number | undefined>(undefined)
 
   React.useEffect(() => {
     const holder = customHolderRef?.current || document.body
@@ -79,6 +86,19 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
 
       // we use `translate3d` to force using the GPU if available
       targetRef.current.style.transform = `translate3d(${newX}px, ${newY}px, 0px)`
+    }
+  }
+
+  const updateplaceholderPosition = (index: number) => {
+    console.log('updateplaceholderPosition', index);
+    if (placeholderRef.current && sourceIndexRef.current !== undefined) {
+      const sourceRect = itemsRect.current[sourceIndexRef.current]
+      const targetRect = itemsRect.current[index]
+      const newX = lockAxis === 'y' ? sourceRect.left : targetRect.left
+      const newY = lockAxis === 'x' ? sourceRect.top : targetRect.top
+
+      // we use `translate3d` to force using the GPU if available
+      placeholderRef.current.style.transform = `translate3d(${newX}px, ${newY}px, 0px)`
     }
   }
 
@@ -158,6 +178,15 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
 
       updateTargetPosition(pointInWindow)
 
+      if (placeholderRef.current) {
+        placeholderRef.current.style.width = `${sourceRect.width}px`
+        placeholderRef.current.style.height = `${sourceRect.height}px`
+        placeholderRef.current.style.opacity = '1'
+        placeholderRef.current.style.visibility = 'visible'
+      }
+  
+      placeholderIndexRef.current = sourceIndex;
+
       // Adds a nice little physical feedback
       if (window.navigator.vibrate) {
         window.navigator.vibrate(100)
@@ -215,6 +244,8 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
         // we want the translation to be animated
         currentItem.style.transitionDuration = '300ms'
       }
+
+      updateplaceholderPosition(lastTargetIndexRef.current);
     },
     onEnd: () => {
       // we reset all items translations (the parent is expected to sort the items in the onSortEnd callback)
@@ -252,6 +283,12 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
         holder.removeChild(targetRef.current)
         targetRef.current = null
       }
+
+      if (placeholderRef.current) {
+        placeholderRef.current.style.opacity = '0'
+        placeholderRef.current.style.visibility = 'hidden'
+      }
+      placeholderIndexRef.current = undefined;
     },
   })
 
@@ -294,7 +331,20 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
       ...rest,
       ref: containerRef,
     },
-    <SortableListContext.Provider value={context}>{children}</SortableListContext.Provider>
+    <SortableListContext.Provider value={context}>
+      {children}
+      {placeholder && (
+        <span style={{
+          opacity: 0,
+          visibility: 'hidden',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          pointerEvents: 'none',
+        }}
+        ref={placeholderRef}>{placeholder}</span>
+      )}
+    </SortableListContext.Provider>
   )
 }
 
