@@ -47,7 +47,7 @@ npm install react-easy-sort --save
 
 ```js
 import SortableList, { SortableItem } from 'react-easy-sort'
-import { arrayMoveImmutable } from 'array-move';
+import { arrayMoveImmutable } from 'array-move'
 
 const App = () => {
   const [items, setItems] = React.useState(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'])
@@ -80,6 +80,7 @@ const App = () => {
 | **lockAxis**             |            Determines if an axis should be locked            |                 `'x'` or `'y'`                 |                 |
 | **allowDrag**            |           Determines whether items can be dragged            |                   `boolean`                    |          `true` |
 | **customHolderRef**      | Ref of an element to use as a container for the dragged item |     `React.RefObject<HTMLElement \| null>`     | `document.body` |
+| **placeholder**          |            React element to use as a placeholder             |                  `ReactNode`                   |                 |
 
 ### SortableItem
 

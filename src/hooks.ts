@@ -268,3 +268,67 @@ export const useDrag = ({
   // https://developers.google.com/web/updates/2017/01/scrolling-intervention
   return isTouchDevice ? {} : { onMouseDown }
 }
+
+type UsePlaceholderProps = {
+  ref?: React.MutableRefObject<HTMLElement | null>;
+  show?: (sourceRect: DOMRect) => void;
+  hide?: () => void;
+  setPosition?: (index: number, itemsRect: DOMRect[], lockAxis?: 'x' | 'y') => void;
+  render?: () => React.ReactElement;
+}
+
+export const usePlaceholder = (content?: React.ReactNode): UsePlaceholderProps => {
+  const placeholderRef = React.useRef<HTMLElement | null>(null)
+
+  if (!content) {
+    return {};
+  }
+
+  const show = (sourceRect: DOMRect) => {
+    if (placeholderRef.current) {
+      placeholderRef.current.style.width = `${sourceRect.width}px`
+      placeholderRef.current.style.height = `${sourceRect.height}px`
+      placeholderRef.current.style.opacity = '1'
+      placeholderRef.current.style.visibility = 'visible'
+    }
+  }
+
+  const hide = () => {
+    if (placeholderRef.current) {
+      placeholderRef.current.style.opacity = '0'
+      placeholderRef.current.style.visibility = 'hidden'
+    }
+  }
+
+  const setPosition = (index: number, itemsRect: DOMRect[], lockAxis?: 'x' | 'y') => {
+    if (placeholderRef.current) {
+      const sourceRect = itemsRect[index]
+      const newX = lockAxis === 'y' ? sourceRect.left : itemsRect[index].left
+      const newY = lockAxis === 'x' ? sourceRect.top : itemsRect[index].top
+
+      placeholderRef.current.style.transform = `translate3d(${newX}px, ${newY}px, 0px)`
+    }
+  }
+
+  const PlaceholderWrapper = (): React.ReactElement => {
+    return React.createElement('span', {
+      ref: placeholderRef,
+      style: {
+        opacity: 0,
+        visibility: 'hidden',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        pointerEvents: 'none',
+      },
+    }, content);
+  }
+
+  return {
+    ref: placeholderRef,
+    show,
+    hide,
+    setPosition,
+    render: PlaceholderWrapper,
+  }
+};

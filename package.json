@@ -105,8 +105,5 @@
   },
   "jest": {
     "preset": "ts-jest"
-  },
-  "overrides": {
-    "ip": "1.1.8"
   }
 }
