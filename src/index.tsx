@@ -7,7 +7,7 @@ import { Point } from './types'
 
 const DEFAULT_CONTAINER_TAG = 'div'
 
-type Props<TTag extends keyof JSX.IntrinsicElements> = Omit<HTMLAttributes<TTag>, "placeholder"> & {
+type Props<TTag extends keyof JSX.IntrinsicElements> = Omit<HTMLAttributes<TTag>, 'placeholder'> & {
   children: React.ReactNode
   /** Determines whether drag functionality is enabled, defaults to true */
   allowDrag?: boolean

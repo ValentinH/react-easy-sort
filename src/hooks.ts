@@ -270,18 +270,18 @@ export const useDrag = ({
 }
 
 type UsePlaceholderProps = Partial<{
-  ref: React.MutableRefObject<HTMLElement | null>;
-  show: (sourceRect: DOMRect) => void;
-  hide: () => void;
-  setPosition: (index: number, itemsRect: DOMRect[], lockAxis?: 'x' | 'y') => void;
-  render: () => React.ReactElement;
+  ref: React.MutableRefObject<HTMLElement | null>
+  show: (sourceRect: DOMRect) => void
+  hide: () => void
+  setPosition: (index: number, itemsRect: DOMRect[], lockAxis?: 'x' | 'y') => void
+  render: () => React.ReactElement
 }>
 
 export const usePlaceholder = (content?: React.ReactNode): UsePlaceholderProps => {
   const placeholderRef = React.useRef<HTMLElement | null>(null)
 
   if (!content) {
-    return {};
+    return {}
   }
 
   const show = (sourceRect: DOMRect) => {
@@ -311,18 +311,22 @@ export const usePlaceholder = (content?: React.ReactNode): UsePlaceholderProps =
   }
 
   const PlaceholderWrapper = (): React.ReactElement => {
-    return React.createElement('span', {
-      ref: placeholderRef,
-      ariaHidden: true,
-      style: {
-        opacity: 0,
-        visibility: 'hidden',
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        pointerEvents: 'none',
+    return React.createElement(
+      'span',
+      {
+        ref: placeholderRef,
+        ariaHidden: true,
+        style: {
+          opacity: 0,
+          visibility: 'hidden',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          pointerEvents: 'none',
+        },
       },
-    }, content);
+      content
+    )
   }
 
   return {
@@ -332,4 +336,4 @@ export const usePlaceholder = (content?: React.ReactNode): UsePlaceholderProps =
     setPosition,
     render: PlaceholderWrapper,
   }
-};
+}
