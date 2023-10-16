@@ -269,13 +269,13 @@ export const useDrag = ({
   return isTouchDevice ? {} : { onMouseDown }
 }
 
-type UsePlaceholderProps = {
-  ref?: React.MutableRefObject<HTMLElement | null>;
-  show?: (sourceRect: DOMRect) => void;
-  hide?: () => void;
-  setPosition?: (index: number, itemsRect: DOMRect[], lockAxis?: 'x' | 'y') => void;
-  render?: () => React.ReactElement;
-}
+type UsePlaceholderProps = Partial<{
+  ref: React.MutableRefObject<HTMLElement | null>;
+  show: (sourceRect: DOMRect) => void;
+  hide: () => void;
+  setPosition: (index: number, itemsRect: DOMRect[], lockAxis?: 'x' | 'y') => void;
+  render: () => React.ReactElement;
+}>
 
 export const usePlaceholder = (content?: React.ReactNode): UsePlaceholderProps => {
   const placeholderRef = React.useRef<HTMLElement | null>(null)

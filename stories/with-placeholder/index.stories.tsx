@@ -98,7 +98,7 @@ export const Demo: Story<StoryProps> = ({ count }: StoryProps) => {
   )
 }
 
-const Placeholder = (): JSX.Element => {
+const Placeholder = () => {
   const classes = useStyles()
   return <div className={classes.placeholder}>Placeholder</div>
 }

@@ -162,7 +162,7 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
       }
 
       updateTargetPosition(pointInWindow)
-      placeholderLogic?.show(sourceRect)
+      placeholderLogic.show?.(sourceRect)
 
       // Adds a nice little physical feedback
       if (window.navigator.vibrate) {
@@ -222,7 +222,7 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
         currentItem.style.transitionDuration = '300ms'
       }
 
-      placeholderLogic?.setPosition(lastTargetIndexRef.current, itemsRect.current, lockAxis)
+      placeholderLogic.setPosition?.(lastTargetIndexRef.current, itemsRect.current, lockAxis)
     },
     onEnd: () => {
       // we reset all items translations (the parent is expected to sort the items in the onSortEnd callback)
@@ -253,7 +253,7 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
       }
       sourceIndexRef.current = undefined
       lastTargetIndexRef.current = undefined
-      placeholderLogic?.hide()
+      placeholderLogic.hide?.()
 
       // cleanup the target element from the DOM
       if (targetRef.current) {
@@ -296,8 +296,6 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
     removeKnob,
   ])
 
-  console.log(placeholderLogic)
-
   return React.createElement(
     as || DEFAULT_CONTAINER_TAG,
     {
@@ -307,7 +305,7 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
     },
     <SortableListContext.Provider value={context}>
       {children}
-      {placeholderLogic?.render()}
+      {placeholderLogic.render?.()}
     </SortableListContext.Provider>
   )
 }
