@@ -80,7 +80,7 @@ const App = () => {
 | **lockAxis**             |            Determines if an axis should be locked            |                 `'x'` or `'y'`                 |                 |
 | **allowDrag**            |           Determines whether items can be dragged            |                   `boolean`                    |          `true` |
 | **customHolderRef**      | Ref of an element to use as a container for the dragged item |     `React.RefObject<HTMLElement \| null>`     | `document.body` |
-| **placeholder**          |            React element to use as a placeholder             |                  `ReactNode`                   |                 |
+| **dropTarget**           |             React element to use as a dropTarget             |                  `ReactNode`                   |                 |
 
 ### SortableItem
 

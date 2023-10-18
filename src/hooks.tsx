@@ -269,71 +269,67 @@ export const useDrag = ({
   return isTouchDevice ? {} : { onMouseDown }
 }
 
-type UsePlaceholderProps = Partial<{
-  ref: React.MutableRefObject<HTMLElement | null>
+type UseDropTargetProps = Partial<{
   show: (sourceRect: DOMRect) => void
   hide: () => void
   setPosition: (index: number, itemsRect: DOMRect[], lockAxis?: 'x' | 'y') => void
   render: () => React.ReactElement
 }>
 
-export const usePlaceholder = (content?: React.ReactNode): UsePlaceholderProps => {
-  const placeholderRef = React.useRef<HTMLElement | null>(null)
+export const useDropTarget = (content?: React.ReactNode): UseDropTargetProps => {
+  const dropTargetRef = React.useRef<HTMLDivElement | null>(null)
 
   if (!content) {
     return {}
   }
 
   const show = (sourceRect: DOMRect) => {
-    if (placeholderRef.current) {
-      placeholderRef.current.style.width = `${sourceRect.width}px`
-      placeholderRef.current.style.height = `${sourceRect.height}px`
-      placeholderRef.current.style.opacity = '1'
-      placeholderRef.current.style.visibility = 'visible'
+    if (dropTargetRef.current) {
+      dropTargetRef.current.style.width = `${sourceRect.width}px`
+      dropTargetRef.current.style.height = `${sourceRect.height}px`
+      dropTargetRef.current.style.opacity = '1'
+      dropTargetRef.current.style.visibility = 'visible'
     }
   }
 
   const hide = () => {
-    if (placeholderRef.current) {
-      placeholderRef.current.style.opacity = '0'
-      placeholderRef.current.style.visibility = 'hidden'
+    if (dropTargetRef.current) {
+      dropTargetRef.current.style.opacity = '0'
+      dropTargetRef.current.style.visibility = 'hidden'
     }
   }
 
   const setPosition = (index: number, itemsRect: DOMRect[], lockAxis?: 'x' | 'y') => {
-    if (placeholderRef.current) {
+    if (dropTargetRef.current) {
       const sourceRect = itemsRect[index]
       const newX = lockAxis === 'y' ? sourceRect.left : itemsRect[index].left
       const newY = lockAxis === 'x' ? sourceRect.top : itemsRect[index].top
 
-      placeholderRef.current.style.transform = `translate3d(${newX}px, ${newY}px, 0px)`
+      dropTargetRef.current.style.transform = `translate3d(${newX}px, ${newY}px, 0px)`
     }
   }
 
-  const PlaceholderWrapper = (): React.ReactElement => {
-    return React.createElement(
-      'span',
-      {
-        ref: placeholderRef,
-        ariaHidden: true,
-        style: {
-          opacity: 0,
-          visibility: 'hidden',
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          pointerEvents: 'none',
-        },
-      },
-      content
-    )
-  }
+  const DropTargetWrapper = (): React.ReactElement => (
+    <div
+      ref={dropTargetRef}
+      aria-hidden
+      style={{
+        opacity: 0,
+        visibility: 'hidden',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        pointerEvents: 'none',
+      }}
+    >
+      {content}
+    </div>
+  )
 
   return {
-    ref: placeholderRef,
     show,
     hide,
     setPosition,
-    render: PlaceholderWrapper,
+    render: DropTargetWrapper,
   }
 }

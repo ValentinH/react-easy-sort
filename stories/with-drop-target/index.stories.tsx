@@ -10,7 +10,7 @@ import { makeStyles } from '@material-ui/core'
 
 export default {
   component: SortableList,
-  title: 'react-easy-sort/With placeholder',
+  title: 'react-easy-sort/With drop target',
   parameters: {
     componentSubtitle: 'SortableList',
   },
@@ -53,7 +53,7 @@ const useStyles = makeStyles({
   dragged: {
     backgroundColor: 'rgb(37, 37, 197)',
   },
-  placeholder: {
+  dropTarget: {
     border: '2px dashed rgb(84, 84, 241)',
     height: 150,
     boxSizing: 'border-box',
@@ -87,7 +87,7 @@ export const Demo: Story<StoryProps> = ({ count }: StoryProps) => {
       onSortEnd={onSortEnd}
       className={classes.list}
       draggedItemClassName={classes.dragged}
-      placeholder={<Placeholder />}
+      dropTarget={<DropTarget />}
     >
       {items.map((item) => (
         <SortableItem key={item}>
@@ -98,7 +98,7 @@ export const Demo: Story<StoryProps> = ({ count }: StoryProps) => {
   )
 }
 
-const Placeholder = () => {
+const DropTarget = () => {
   const classes = useStyles()
-  return <div className={classes.placeholder}>Placeholder</div>
+  return <div className={classes.dropTarget}>Drop Target</div>
 }
