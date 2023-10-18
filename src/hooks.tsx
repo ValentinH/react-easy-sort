@@ -268,3 +268,68 @@ export const useDrag = ({
   // https://developers.google.com/web/updates/2017/01/scrolling-intervention
   return isTouchDevice ? {} : { onMouseDown }
 }
+
+type UseDropTargetProps = Partial<{
+  show: (sourceRect: DOMRect) => void
+  hide: () => void
+  setPosition: (index: number, itemsRect: DOMRect[], lockAxis?: 'x' | 'y') => void
+  render: () => React.ReactElement
+}>
+
+export const useDropTarget = (content?: React.ReactNode): UseDropTargetProps => {
+  const dropTargetRef = React.useRef<HTMLDivElement | null>(null)
+
+  if (!content) {
+    return {}
+  }
+
+  const show = (sourceRect: DOMRect) => {
+    if (dropTargetRef.current) {
+      dropTargetRef.current.style.width = `${sourceRect.width}px`
+      dropTargetRef.current.style.height = `${sourceRect.height}px`
+      dropTargetRef.current.style.opacity = '1'
+      dropTargetRef.current.style.visibility = 'visible'
+    }
+  }
+
+  const hide = () => {
+    if (dropTargetRef.current) {
+      dropTargetRef.current.style.opacity = '0'
+      dropTargetRef.current.style.visibility = 'hidden'
+    }
+  }
+
+  const setPosition = (index: number, itemsRect: DOMRect[], lockAxis?: 'x' | 'y') => {
+    if (dropTargetRef.current) {
+      const sourceRect = itemsRect[index]
+      const newX = lockAxis === 'y' ? sourceRect.left : itemsRect[index].left
+      const newY = lockAxis === 'x' ? sourceRect.top : itemsRect[index].top
+
+      dropTargetRef.current.style.transform = `translate3d(${newX}px, ${newY}px, 0px)`
+    }
+  }
+
+  const DropTargetWrapper = (): React.ReactElement => (
+    <div
+      ref={dropTargetRef}
+      aria-hidden
+      style={{
+        opacity: 0,
+        visibility: 'hidden',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        pointerEvents: 'none',
+      }}
+    >
+      {content}
+    </div>
+  )
+
+  return {
+    show,
+    hide,
+    setPosition,
+    render: DropTargetWrapper,
+  }
+}

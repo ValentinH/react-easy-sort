@@ -2,7 +2,7 @@ import arrayMove from 'array-move'
 import React, { HTMLAttributes } from 'react'
 
 import { findItemIndexAtPosition } from './helpers'
-import { useDrag } from './hooks'
+import { useDrag, useDropTarget } from './hooks'
 import { Point } from './types'
 
 const DEFAULT_CONTAINER_TAG = 'div'
@@ -21,6 +21,8 @@ type Props<TTag extends keyof JSX.IntrinsicElements> = HTMLAttributes<TTag> & {
   lockAxis?: 'x' | 'y'
   /** Reference to the Custom Holder element */
   customHolderRef?: React.RefObject<HTMLElement | null>
+  /** Drop target to be used when dragging */
+  dropTarget?: React.ReactNode
 }
 
 // this context is only used so that SortableItems can register/remove themselves
@@ -41,6 +43,7 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
   as,
   lockAxis,
   customHolderRef,
+  dropTarget,
   ...rest
 }: Props<TTag>) => {
   // this array contains the elements than can be sorted (wrapped inside SortableItem)
@@ -59,6 +62,8 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
   const lastTargetIndexRef = React.useRef<number | undefined>(undefined)
   // contains the offset point where the initial drag occurred to be used when dragging the item
   const offsetPointRef = React.useRef<Point>({ x: 0, y: 0 })
+  // contains the dropTarget logic
+  const dropTargetLogic = useDropTarget(dropTarget)
 
   React.useEffect(() => {
     const holder = customHolderRef?.current || document.body
@@ -157,6 +162,7 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
       }
 
       updateTargetPosition(pointInWindow)
+      dropTargetLogic.show?.(sourceRect)
 
       // Adds a nice little physical feedback
       if (window.navigator.vibrate) {
@@ -215,6 +221,8 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
         // we want the translation to be animated
         currentItem.style.transitionDuration = '300ms'
       }
+
+      dropTargetLogic.setPosition?.(lastTargetIndexRef.current, itemsRect.current, lockAxis)
     },
     onEnd: () => {
       // we reset all items translations (the parent is expected to sort the items in the onSortEnd callback)
@@ -245,6 +253,7 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
       }
       sourceIndexRef.current = undefined
       lastTargetIndexRef.current = undefined
+      dropTargetLogic.hide?.()
 
       // cleanup the target element from the DOM
       if (targetRef.current) {
@@ -294,7 +303,10 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
       ...rest,
       ref: containerRef,
     },
-    <SortableListContext.Provider value={context}>{children}</SortableListContext.Provider>
+    <SortableListContext.Provider value={context}>
+      {children}
+      {dropTargetLogic.render?.()}
+    </SortableListContext.Provider>
   )
 }
 
