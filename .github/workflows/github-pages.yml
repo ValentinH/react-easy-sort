@@ -2,7 +2,7 @@ name: Github pages deployment
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -12,7 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      
+
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18.x
+
       # setup cache
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -27,7 +32,7 @@ jobs:
 
       - name: Install modules
         run: yarn
-        
+
       - name: Build storybook
         run: yarn build-storybook
 
