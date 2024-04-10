@@ -32,6 +32,8 @@ const useStyles = makeStyles({
     display: 'flex',
     flexWrap: 'wrap',
     userSelect: 'none',
+    width: 996,
+    margin: '30px auto',
   },
   item: {
     position: 'relative',
@@ -59,6 +61,11 @@ const useStyles = makeStyles({
     '& button': {
       opacity: 0,
     },
+    cursor: 'move',
+    zIndex: 100,
+  },
+  forbidden: {
+    cursor: 'not-allowed',
   },
 })
 
@@ -132,6 +139,8 @@ export const Demo: Story<StoryProps> = ({ count }: StoryProps) => {
       onSortEnd={onSortEnd}
       className={classes.root}
       draggedItemClassName={classes.dragged}
+      draggedForbiddenClassName={classes.forbidden}
+      forbiddenPointType='point'
     >
       {items.slice(0, count).map(({ name, image }) => (
         <SortableItem key={name}>
