@@ -1,5 +1,5 @@
 {
-  "name": "react-easy-sort",
+  "name": "@reyhappen/react-easy-sort",
   "version": "1.6.0",
   "description": "A React component to sort items in lists or grids",
   "homepage": "https://ValentinH.github.io/react-easy-sort/",
@@ -12,7 +12,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ValentinH/react-easy-sort"
+    "url": "https://github.com/reyhappen/react-easy-sort"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
