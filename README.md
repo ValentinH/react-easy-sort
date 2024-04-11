@@ -78,7 +78,7 @@ const App = () => {
 | **onSortEnd\***               |             Called when the user finishes a sorting gesture.            | `(oldIndex: number, newIndex: number) => void` |               - |
 | **draggedItemClassName**      |                 Class applied to the item being dragged                 |                    `string`                    |               - |
 | **draggedForbiddenClassName** |  Class applied to the item being dragged out of the container element   |                    `string`                    |               - |
-| **forbiddenPointType**      | whether to use a point or an element to determine the item is in the forbidden position |                    `'point' or 'element'`                    |               - |
+| **forbiddenPointType**      | whether to use a point or an element to determine the item is in the forbidden position |                    `'point' or 'element'`                    |               point |
 | **lockAxis**                  |                 Determines if an axis should be locked                  |                 `'x'` or `'y'`                 |                 |
 | **allowDrag**                 |                 Determines whether items can be dragged                 |                   `boolean`                    |          `true` |
 | **customHolderRef**           |       Ref of an element to use as a container for the dragged item      |     `React.RefObject<HTMLElement \| null>`     | `document.body` |
