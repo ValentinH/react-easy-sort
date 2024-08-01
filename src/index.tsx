@@ -23,6 +23,8 @@ type Props<TTag extends keyof JSX.IntrinsicElements> = HTMLAttributes<TTag> & {
   customHolderRef?: React.RefObject<HTMLElement | null>
   /** Drop target to be used when dragging */
   dropTarget?: React.ReactNode
+  /** Determines whether sorted items are positioned as stack, defaults to false */
+  hasStackedItems?: boolean
 }
 
 // this context is only used so that SortableItems can register/remove themselves
@@ -44,6 +46,7 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
   lockAxis,
   customHolderRef,
   dropTarget,
+  hasStackedItems,
   ...rest
 }: Props<TTag>) => {
   // this array contains the elements than can be sorted (wrapped inside SortableItem)
@@ -137,7 +140,9 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
 
       itemsRect.current = itemsRef.current.map((item) => item.getBoundingClientRect())
 
-      const sourceIndex = findItemIndexAtPosition(pointInWindow, itemsRect.current)
+      const sourceIndex = findItemIndexAtPosition(pointInWindow, itemsRect.current, {
+        isStackedSourceSearch: hasStackedItems,
+      })
       // if we are not starting the drag gesture on a SortableItem, we exit early
       if (sourceIndex === -1) {
         return
@@ -186,6 +191,7 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
 
       const targetIndex = findItemIndexAtPosition(targetPoint, itemsRect.current, {
         fallbackToClosest: true,
+        isStackedTargetSearch: hasStackedItems,
       })
       // if not target detected, we don't need to update other items' position
       if (targetIndex === -1) {
