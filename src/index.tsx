@@ -11,6 +11,10 @@ type Props<TTag extends keyof JSX.IntrinsicElements> = HTMLAttributes<TTag> & {
   children: React.ReactNode
   /** Determines whether drag functionality is enabled, defaults to true */
   allowDrag?: boolean
+  /** Called when the user starts a sorting gesture. */
+  onSortStart?: () => void
+  /** Called when the position of an item changed during a sorting gesture. */
+  onSortMove?: (newIndex: number) => void
   /** Called when the user finishes a sorting gesture. */
   onSortEnd: (oldIndex: number, newIndex: number) => void
   /** Class applied to the item being dragged */
@@ -38,6 +42,8 @@ const SortableListContext = React.createContext<Context | undefined>(undefined)
 const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_CONTAINER_TAG>({
   children,
   allowDrag = true,
+  onSortStart,
+  onSortMove,
   onSortEnd,
   draggedItemClassName,
   as,
@@ -64,6 +70,8 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
   const offsetPointRef = React.useRef<Point>({ x: 0, y: 0 })
   // contains the dropTarget logic
   const dropTargetLogic = useDropTarget(dropTarget)
+  // contains the original opacity of the sorted item in order te restore it correctly
+  const sourceOpacityRef = React.useRef<string>('1')
 
   React.useEffect(() => {
     const holder = customHolderRef?.current || document.body
@@ -146,11 +154,17 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
       // saving the index of the item being dragged
       sourceIndexRef.current = sourceIndex
 
+      // let the parent know that sort started
+      if (onSortStart) {
+        onSortStart();
+      }
+
       // the item being dragged is copied to the document body and will be used as the target
       copyItem(sourceIndex)
 
-      // hide source during the drag gesture
+      // hide source during the drag gesture (and store original opacity)
       const source = itemsRef.current[sourceIndex]
+      sourceOpacityRef.current = source.style.opacity ?? '1';
       source.style.opacity = '0'
       source.style.visibility = 'hidden'
 
@@ -191,6 +205,12 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
       if (targetIndex === -1) {
         return
       }
+
+      // if targetIndex changed and last target index is set we can let the parent know the new position
+      if (onSortMove && lastTargetIndexRef.current !== undefined && lastTargetIndexRef.current !== targetIndex) {
+        onSortMove(targetIndex);
+      }
+
       // we keep track of the last target index (to be passed to the onSortEnd callback)
       lastTargetIndexRef.current = targetIndex
 
@@ -237,7 +257,7 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
         // show the source item again
         const source = itemsRef.current[sourceIndex]
         if (source) {
-          source.style.opacity = '1'
+          source.style.opacity = sourceOpacityRef.current
           source.style.visibility = ''
         }
 
