@@ -72,17 +72,17 @@ const App = () => {
 
 ### SortableList
 
-| Name                 |                         Description                          |                      Type                      |         Default |
-|----------------------|:------------------------------------------------------------:|:----------------------------------------------:| --------------: |
-| **as**               |        Determines html tag for the container element         |         `keyof JSX.IntrinsicElements`          |           `div` |
-| **onSortStart**      |        Called when the user starts a sorting gesture         |                  `() => void`                  |               - |
-| **onSortMove**       | Called when the dragged item changes position during sorting |         `(newIndex: number) => void`           |               - |
-| **onSortEnd\***      |       Called when the user finishes a sorting gesture.       | `(oldIndex: number, newIndex: number) => void` |               - |
-| **draggedItemClassName** |           Class applied to the item being dragged        |                    `string`                    |               - |
-| **lockAxis**         |            Determines if an axis should be locked            |                 `'x'` or `'y'`                 |                 |
-| **allowDrag**        |           Determines whether items can be dragged            |                   `boolean`                    |          `true` |
-| **customHolderRef**  | Ref of an element to use as a container for the dragged item |     `React.RefObject<HTMLElement \| null>`     | `document.body` |
-| **dropTarget**       |             React element to use as a dropTarget             |                  `ReactNode`                   |                 |
+| Name                     |                              Description                               |                      Type                      |         Default |
+|--------------------------|:----------------------------------------------------------------------:|:----------------------------------------------:| --------------: |
+| **as**                   |             Determines html tag for the container element              |         `keyof JSX.IntrinsicElements`          |           `div` |
+| **onSortStart**          |             Called when the user starts a sorting gesture              |                  `() => void`                  |               - |
+| **onSortMove**           | Called when the dragged item changes position during a sorting gesture |         `(newIndex: number) => void`           |               - |
+| **onSortEnd\***          |            Called when the user finishes a sorting gesture.            | `(oldIndex: number, newIndex: number) => void` |               - |
+| **draggedItemClassName** |                Class applied to the item being dragged                 |                    `string`                    |               - |
+| **lockAxis**             |                 Determines if an axis should be locked                 |                 `'x'` or `'y'`                 |                 |
+| **allowDrag**            |                Determines whether items can be dragged                 |                   `boolean`                    |          `true` |
+| **customHolderRef**      |      Ref of an element to use as a container for the dragged item      |     `React.RefObject<HTMLElement \| null>`     | `document.body` |
+| **dropTarget**           |                  React element to use as a dropTarget                  |                  `ReactNode`                   |                 |
 
 ### SortableItem
 
