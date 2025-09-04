@@ -70,6 +70,8 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
   const offsetPointRef = React.useRef<Point>({ x: 0, y: 0 })
   // contains the dropTarget logic
   const dropTargetLogic = useDropTarget(dropTarget)
+  // contains the original opacity of the sorted item in order te restore it correctly
+  const sourceOpacityRef = React.useRef<string>('1')
 
   React.useEffect(() => {
     const holder = customHolderRef?.current || document.body
@@ -160,8 +162,9 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
       // the item being dragged is copied to the document body and will be used as the target
       copyItem(sourceIndex)
 
-      // hide source during the drag gesture
+      // hide source during the drag gesture (and store original opacity)
       const source = itemsRef.current[sourceIndex]
+      sourceOpacityRef.current = source.style.opacity ?? '1';
       source.style.opacity = '0'
       source.style.visibility = 'hidden'
 
@@ -254,7 +257,7 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
         // show the source item again
         const source = itemsRef.current[sourceIndex]
         if (source) {
-          source.style.opacity = '1'
+          source.style.opacity = sourceOpacityRef.current
           source.style.visibility = ''
         }
 
