@@ -1,6 +1,6 @@
 {
   "name": "react-easy-sort",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "A React component to sort items in lists or grids",
   "homepage": "https://ValentinH.github.io/react-easy-sort/",
   "keywords": [
@@ -37,7 +37,6 @@
     "prepublishOnly": "yarn-or-npm build",
     "precommit": "lint-staged",
     "format": "prettier --write src/**/*.ts* stories/**/*.ts*",
-    "npm:publish": "np --contents=dist --package-manager=yarn",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build -o ./docs"
   },
@@ -72,7 +71,6 @@
     "jsdom": "^27.0.0",
     "lint-staged": "^10.4.0",
     "next": "^15.5.4",
-    "np": "^10.2.0",
     "postcss": "^8.5.6",
     "prettier": "3.6.2",
     "react": "^18.3.1",
