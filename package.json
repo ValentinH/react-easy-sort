@@ -18,7 +18,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "author": "Valentin Hervieu",
   "license": "MIT",
