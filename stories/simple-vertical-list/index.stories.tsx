@@ -20,10 +20,17 @@ export default {
       control: {
         type: 'range',
         min: 3,
-        max: 12,
+        max: 120,
         step: 1,
       },
-      defaultValue: 3,
+      defaultValue: 30,
+    },
+    autoScroll: {
+      name: 'Auto scroll',
+      control: {
+        type: 'boolean',
+      },
+      defaultValue: false,
     },
   },
 }
@@ -52,9 +59,10 @@ const useStyles = makeStyles({
 
 type StoryProps = {
   count: number
+  autoScroll: boolean
 }
 
-export const Demo: Story<StoryProps> = ({ count }: StoryProps) => {
+export const Demo: Story<StoryProps> = ({ count, autoScroll }: StoryProps) => {
   const classes = useStyles()
 
   const [items, setItems] = React.useState<string[]>([])
@@ -72,6 +80,7 @@ export const Demo: Story<StoryProps> = ({ count }: StoryProps) => {
       onSortEnd={onSortEnd}
       className={classes.list}
       draggedItemClassName={classes.dragged}
+      autoScroll={autoScroll}
     >
       {items.map((item) => (
         <SortableItem key={item}>
