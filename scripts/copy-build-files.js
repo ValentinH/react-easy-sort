@@ -14,7 +14,6 @@ async function createPackageFile() {
     ...JSON.parse(packageData),
     scripts: undefined,
     devDependencies: undefined,
-    jest: undefined,
     'lint-staged': undefined,
     main: './index.js',
     'umd:main': './umd/react-easy-sort.js',

@@ -1,4 +1,4 @@
-import { Point } from './types'
+import type { Point } from './types'
 
 /**
  * This function check if a given point is inside of the items rect.
@@ -22,7 +22,7 @@ export const findItemIndexAtPosition = (
       const itemCenterX = (rect.left + rect.right) / 2
       const itemCenterY = (rect.top + rect.bottom) / 2
 
-      const distance = Math.sqrt(Math.pow(x - itemCenterX, 2) + Math.pow(y - itemCenterY, 2)) // ** 2 operator is not supported on IE11
+      const distance = Math.sqrt((x - itemCenterX) ** 2 + (y - itemCenterY) ** 2) // ** 2 operator is not supported on IE11
       if (distance < smallestDistance) {
         smallestDistance = distance
         smallestDistanceIndex = index
@@ -49,8 +49,7 @@ export const getScrollableParent = (element: HTMLElement | null): HTMLElement | 
 
     // check if the element is horizontally scrollable
     const isHorizontallyScrollable =
-      (overflowX === 'auto' || overflowX === 'scroll') &&
-      current.scrollWidth > current.clientWidth
+      (overflowX === 'auto' || overflowX === 'scroll') && current.scrollWidth > current.clientWidth
 
     // check if the element is vertically scrollable
     const isVerticallyScrollable =
@@ -66,4 +65,21 @@ export const getScrollableParent = (element: HTMLElement | null): HTMLElement | 
   }
 
   return window
+}
+
+function arrayMoveMutable<T>(array: T[], fromIndex: number, toIndex: number) {
+  const startIndex = fromIndex < 0 ? array.length + fromIndex : fromIndex
+
+  if (startIndex >= 0 && startIndex < array.length) {
+    const endIndex = toIndex < 0 ? array.length + toIndex : toIndex
+
+    const [item] = array.splice(fromIndex, 1)
+    array.splice(endIndex, 0, item)
+  }
+}
+
+export function arrayMove<T>(array: T[], fromIndex: number, toIndex: number) {
+  const newArray = [...array]
+  arrayMoveMutable(newArray, fromIndex, toIndex)
+  return newArray
 }

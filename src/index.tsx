@@ -1,9 +1,8 @@
-import arrayMove from 'array-move'
-import React, { HTMLAttributes } from 'react'
+import React, { type HTMLAttributes } from 'react'
 
-import { findItemIndexAtPosition, getScrollableParent } from './helpers'
+import { arrayMove, findItemIndexAtPosition, getScrollableParent } from './helpers'
 import { useDrag, useDropTarget } from './hooks'
-import { Point } from './types'
+import type { Point } from './types'
 
 const DEFAULT_CONTAINER_TAG = 'div'
 
@@ -259,7 +258,12 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
 
           let scrollerRect
           if (scroller instanceof Window) {
-            scrollerRect = { top: 0, bottom: scroller.innerHeight, left: 0, right: scroller.innerWidth }
+            scrollerRect = {
+              top: 0,
+              bottom: scroller.innerHeight,
+              left: 0,
+              right: scroller.innerWidth,
+            }
           } else {
             scrollerRect = scroller.getBoundingClientRect()
           }
@@ -267,9 +271,12 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
           // vertical scroll logic (if not locked)
           if (lockAxis !== 'x') {
             if (pointerY < scrollerRect.top + SCROLL_THRESHOLD && pointerY >= scrollerRect.top) {
-              const proximity = (scrollerRect.top + SCROLL_THRESHOLD) - pointerY
+              const proximity = scrollerRect.top + SCROLL_THRESHOLD - pointerY
               scrollSpeedRef.current.y = -MAX_SCROLL_SPEED * (proximity / SCROLL_THRESHOLD)
-            } else if (pointerY > scrollerRect.bottom - SCROLL_THRESHOLD && pointerY <= scrollerRect.bottom) {
+            } else if (
+              pointerY > scrollerRect.bottom - SCROLL_THRESHOLD &&
+              pointerY <= scrollerRect.bottom
+            ) {
               const proximity = pointerY - (scrollerRect.bottom - SCROLL_THRESHOLD)
               scrollSpeedRef.current.y = MAX_SCROLL_SPEED * (proximity / SCROLL_THRESHOLD)
             }
@@ -278,16 +285,22 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
           // horizontal scroll logic (if not locked)
           if (lockAxis !== 'y') {
             if (pointerX < scrollerRect.left + SCROLL_THRESHOLD && pointerX >= scrollerRect.left) {
-              const proximity = (scrollerRect.left + SCROLL_THRESHOLD) - pointerX
+              const proximity = scrollerRect.left + SCROLL_THRESHOLD - pointerX
               scrollSpeedRef.current.x = -MAX_SCROLL_SPEED * (proximity / SCROLL_THRESHOLD)
-            } else if (pointerX > scrollerRect.right - SCROLL_THRESHOLD && pointerX <= scrollerRect.right) {
+            } else if (
+              pointerX > scrollerRect.right - SCROLL_THRESHOLD &&
+              pointerX <= scrollerRect.right
+            ) {
               const proximity = pointerX - (scrollerRect.right - SCROLL_THRESHOLD)
               scrollSpeedRef.current.x = MAX_SCROLL_SPEED * (proximity / SCROLL_THRESHOLD)
             }
           }
 
           // start animation if speed is not 0
-          if ((scrollSpeedRef.current.x !== 0 || scrollSpeedRef.current.y !== 0) && !scrollAnimationRef.current) {
+          if (
+            (scrollSpeedRef.current.x !== 0 || scrollSpeedRef.current.y !== 0) &&
+            !scrollAnimationRef.current
+          ) {
             scrollAnimationRef.current = requestAnimationFrame(autoScrolling)
           }
         }
@@ -300,12 +313,12 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
         if (scroller instanceof HTMLElement) {
           scrollDelta = {
             y: scroller.scrollTop - initialScrollRef.current.y,
-            x: scroller.scrollLeft - initialScrollRef.current.x
+            x: scroller.scrollLeft - initialScrollRef.current.x,
           }
         } else if (scroller instanceof Window) {
           scrollDelta = {
             y: scroller.scrollY - initialScrollRef.current.y,
-            x: scroller.scrollX - initialScrollRef.current.x
+            x: scroller.scrollX - initialScrollRef.current.x,
           }
         }
       }
@@ -325,7 +338,11 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
       }
 
       // if targetIndex changed and last target index is set we can let the parent know the new position
-      if (onSortMove && lastTargetIndexRef.current !== undefined && lastTargetIndexRef.current !== targetIndex) {
+      if (
+        onSortMove &&
+        lastTargetIndexRef.current !== undefined &&
+        lastTargetIndexRef.current !== targetIndex
+      ) {
         onSortMove(targetIndex)
       }
 
@@ -442,12 +459,10 @@ const SortableList = <TTag extends keyof JSX.IntrinsicElements = typeof DEFAULT_
 
   // we need to memoize the context to avoid re-rendering every children of the context provider
   // when not needed
-  const context = React.useMemo(() => ({ registerItem, removeItem, registerKnob, removeKnob }), [
-    registerItem,
-    removeItem,
-    registerKnob,
-    removeKnob,
-  ])
+  const context = React.useMemo(
+    () => ({ registerItem, removeItem, registerKnob, removeKnob }),
+    [registerItem, removeItem, registerKnob, removeKnob]
+  )
 
   return React.createElement(
     as || DEFAULT_CONTAINER_TAG,

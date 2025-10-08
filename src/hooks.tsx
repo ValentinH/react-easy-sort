@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Point } from './types'
+import type { Point } from './types'
 
 const getMousePoint = (e: MouseEvent | React.MouseEvent): Point => ({
   x: Number(e.clientX),

@@ -1,11 +1,6 @@
-import { addons } from '@storybook/addons'
-import { create } from '@storybook/theming'
-
-const theme = create({
-  base: 'light',
-  brandTitle: 'react-easy-sort',
-})
+import { addons } from 'storybook/manager-api'
+import customTheme from './custom-theme'
 
 addons.setConfig({
-  theme,
+  theme: customTheme,
 })

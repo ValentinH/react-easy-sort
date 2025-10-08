@@ -1,15 +1,13 @@
 import React from 'react'
-import arrayMove from 'array-move'
+import { arrayMove } from '../../src/helpers'
 
-import { action } from '@storybook/addon-actions'
-import { Story } from '@storybook/react'
+import { action } from 'storybook/actions'
+import { StoryFn } from '@storybook/nextjs-vite'
 
 import SortableList, { SortableItem, SortableKnob } from '../../src/index'
 import { generateItems } from '../helpers'
-import { makeStyles } from '@material-ui/core'
 
 export default {
-  component: SortableList,
   title: 'react-easy-sort/With knobs',
   parameters: {
     componentSubtitle: 'SortableList',
@@ -23,49 +21,18 @@ export default {
         max: 12,
         step: 1,
       },
-      defaultValue: 3,
     },
   },
+  args: {
+    count: 3,
+  },
 }
-
-const useStyles = makeStyles({
-  list: {
-    fontFamily: 'Helvetica, Arial, sans-serif',
-    userSelect: 'none',
-  },
-  item: {
-    flexShrink: 0,
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: 'rgb(84, 84, 241)',
-    color: 'white',
-    margin: 8,
-    width: 150,
-    height: 34,
-    padding: '0 8px',
-  },
-  dragged: {
-    backgroundColor: 'rgb(37, 37, 197)',
-  },
-  knob: {
-    padding: '0.15rem 0.5rem',
-    color: 'rgb(84, 84, 241)',
-    fontSize: '0.8em',
-    backgroundColor: 'white',
-    marginRight: '0.5rem',
-    borderRadius: '2px',
-    cursor: 'grab',
-  },
-})
 
 type StoryProps = {
   count: number
 }
 
-export const Demo: Story<StoryProps> = ({ count }) => {
-  const classes = useStyles()
-
+export const Demo: StoryFn<StoryProps> = ({ count }) => {
   const [items, setItems] = React.useState<string[]>([])
   React.useEffect(() => {
     setItems(generateItems(count))
@@ -77,14 +44,16 @@ export const Demo: Story<StoryProps> = ({ count }) => {
   return (
     <SortableList
       onSortEnd={onSortEnd}
-      className={classes.list}
-      draggedItemClassName={classes.dragged}
+      className="font-sans select-none"
+      draggedItemClassName="bg-blue-800"
     >
       {items.map((item) => (
         <SortableItem key={item}>
-          <div className={classes.item}>
+          <div className="shrink-0 flex justify-between items-center bg-blue-600 text-white m-2 w-[150px] h-[34px] px-2">
             <SortableKnob>
-              <div className={classes.knob}>DRAG</div>
+              <div className="py-[0.15rem] px-2 text-blue-600 text-[0.8em] bg-white mr-2 rounded cursor-grab">
+                DRAG
+              </div>
             </SortableKnob>
             {item}
           </div>

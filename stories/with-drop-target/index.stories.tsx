@@ -1,15 +1,13 @@
 import React from 'react'
-import arrayMove from 'array-move'
+import { arrayMove } from '../../src/helpers'
 
-import { action } from '@storybook/addon-actions'
-import { Story } from '@storybook/react'
+import { action } from 'storybook/actions'
+import { StoryFn } from '@storybook/nextjs-vite'
 
 import SortableList, { SortableItem } from '../../src/index'
 import { generateItems } from '../helpers'
-import { makeStyles } from '@material-ui/core'
 
 export default {
-  component: SortableList,
   title: 'react-easy-sort/With drop target',
   parameters: {
     componentSubtitle: 'SortableList',
@@ -23,55 +21,18 @@ export default {
         max: 12,
         step: 1,
       },
-      defaultValue: 3,
     },
+  },
+  args: {
+    count: 3,
   },
 }
-
-const useStyles = makeStyles({
-  list: {
-    fontFamily: 'Helvetica, Arial, sans-serif',
-    userSelect: 'none',
-    display: 'grid',
-    gridTemplateColumns: 'auto auto auto',
-    gridGap: 16,
-    '@media (min-width: 600px)': {
-      gridGap: 24,
-    },
-  },
-  item: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgb(84, 84, 241)',
-    color: 'white',
-    height: 150,
-    cursor: 'grab',
-    fontSize: 20,
-    userSelect: 'none',
-  },
-  dragged: {
-    backgroundColor: 'rgb(37, 37, 197)',
-  },
-  dropTarget: {
-    border: '2px dashed rgb(84, 84, 241)',
-    height: 150,
-    boxSizing: 'border-box',
-    fontSize: 20,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: 'rgb(84, 84, 241)',
-  },
-})
 
 type StoryProps = {
   count: number
 }
 
-export const Demo: Story<StoryProps> = ({ count }: StoryProps) => {
-  const classes = useStyles()
-
+export const Demo: StoryFn<StoryProps> = ({ count }: StoryProps) => {
   const [items, setItems] = React.useState<string[]>([])
   React.useEffect(() => {
     setItems(generateItems(count))
@@ -85,13 +46,15 @@ export const Demo: Story<StoryProps> = ({ count }: StoryProps) => {
   return (
     <SortableList
       onSortEnd={onSortEnd}
-      className={classes.list}
-      draggedItemClassName={classes.dragged}
+      className="font-sans select-none grid grid-cols-3 gap-4 sm:gap-6"
+      draggedItemClassName="bg-blue-800"
       dropTarget={<DropTarget />}
     >
       {items.map((item) => (
         <SortableItem key={item}>
-          <div className={classes.item}>{item}</div>
+          <div className="flex justify-center items-center bg-blue-600 text-white h-[150px] cursor-grab text-xl select-none">
+            {item}
+          </div>
         </SortableItem>
       ))}
     </SortableList>
@@ -99,6 +62,9 @@ export const Demo: Story<StoryProps> = ({ count }: StoryProps) => {
 }
 
 const DropTarget = () => {
-  const classes = useStyles()
-  return <div className={classes.dropTarget}>Drop Target</div>
+  return (
+    <div className="border-2 border-dashed border-blue-600 h-[150px] box-border text-xl flex justify-center items-center text-blue-600">
+      Drop Target
+    </div>
+  )
 }

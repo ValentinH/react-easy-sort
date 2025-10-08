@@ -1,15 +1,13 @@
 import React from 'react'
-import arrayMove from 'array-move'
+import { arrayMove } from '../../src/helpers'
 
-import { action } from '@storybook/addon-actions'
-import { Story } from '@storybook/react'
+import { action } from 'storybook/actions'
+import { StoryFn } from '@storybook/nextjs-vite'
 
 import SortableList, { SortableItem } from '../../src/index'
 import { generateItems } from '../helpers'
-import { makeStyles } from '@material-ui/core'
 
 export default {
-  component: SortableList,
   title: 'react-easy-sort/Simple horizontal list',
   parameters: {
     componentSubtitle: 'SortableList',
@@ -23,50 +21,26 @@ export default {
         max: 120,
         step: 1,
       },
-      defaultValue: 30,
     },
     autoScroll: {
       name: 'Auto scroll',
       control: {
         type: 'boolean',
       },
-      defaultValue: false,
     },
   },
+  args: {
+    count: 30,
+    autoScroll: false,
+  },
 }
-
-const useStyles = makeStyles({
-  list: {
-    fontFamily: 'Helvetica, Arial, sans-serif',
-    userSelect: 'none',
-    display: 'flex',
-    justifyContent: 'flex-start',
-  },
-  item: {
-    flexShrink: 0,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgb(84, 84, 241)',
-    color: 'white',
-    margin: 8,
-    width: 60,
-    height: 60,
-    cursor: 'grab',
-  },
-  dragged: {
-    backgroundColor: 'rgb(37, 37, 197)',
-  },
-})
 
 type StoryProps = {
   count: number
   autoScroll: boolean
 }
 
-export const Demo: Story<StoryProps> = ({ count, autoScroll }: StoryProps) => {
-  const classes = useStyles()
-
+export const Demo: StoryFn<StoryProps> = ({ count, autoScroll }: StoryProps) => {
   const [items, setItems] = React.useState<string[]>([])
   React.useEffect(() => {
     setItems(generateItems(count))
@@ -80,13 +54,15 @@ export const Demo: Story<StoryProps> = ({ count, autoScroll }: StoryProps) => {
   return (
     <SortableList
       onSortEnd={onSortEnd}
-      className={classes.list}
-      draggedItemClassName={classes.dragged}
+      className="font-sans select-none flex justify-start"
+      draggedItemClassName="bg-blue-800"
       autoScroll={autoScroll}
     >
       {items.map((item) => (
         <SortableItem key={item}>
-          <div className={classes.item}>{item}</div>
+          <div className="shrink-0 flex justify-center items-center bg-blue-600 text-white m-2 w-[60px] h-[60px] cursor-grab">
+            {item}
+          </div>
         </SortableItem>
       ))}
     </SortableList>

@@ -1,15 +1,13 @@
 import React from 'react'
-import arrayMove from 'array-move'
+import { arrayMove } from '../../src/helpers'
 
-import { action } from '@storybook/addon-actions'
-import { Story } from '@storybook/react'
+import { action } from 'storybook/actions'
+import { StoryFn } from '@storybook/nextjs-vite'
 
 import SortableList, { SortableItem } from '../../src/index'
 import { generateItems } from '../helpers'
-import { makeStyles } from '@material-ui/core'
 
 export default {
-  component: SortableList,
   title: 'react-easy-sort/Axis lock',
   parameters: {
     componentSubtitle: 'SortableList',
@@ -23,51 +21,24 @@ export default {
         max: 12,
         step: 1,
       },
-      defaultValue: 6,
     },
     lockAxis: {
       options: ['x', 'y'],
       control: { type: 'inline-radio' },
-      defaultValue: 'x',
     },
+  },
+  args: {
+    count: 6,
+    lockAxis: 'x',
   },
 }
-
-const useStyles = makeStyles({
-  list: {
-    fontFamily: 'Helvetica, Arial, sans-serif',
-    userSelect: 'none',
-    display: 'grid',
-    gridTemplateColumns: 'auto auto auto',
-    gridGap: 16,
-    '@media (min-width: 600px)': {
-      gridGap: 24,
-    },
-  },
-  item: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgb(84, 84, 241)',
-    color: 'white',
-    height: 150,
-    cursor: 'grab',
-    fontSize: 20,
-    userSelect: 'none',
-  },
-  dragged: {
-    backgroundColor: 'rgb(37, 37, 197)',
-  },
-})
 
 type StoryProps = {
   count: number
   lockAxis: 'x' | 'y'
 }
 
-export const Demo: Story<StoryProps> = ({ count, lockAxis }: StoryProps) => {
-  const classes = useStyles()
-
+export const Demo: StoryFn<StoryProps> = ({ count, lockAxis }: StoryProps) => {
   const [items, setItems] = React.useState<string[]>([])
   React.useEffect(() => {
     setItems(generateItems(count))
@@ -81,13 +52,15 @@ export const Demo: Story<StoryProps> = ({ count, lockAxis }: StoryProps) => {
   return (
     <SortableList
       onSortEnd={onSortEnd}
-      className={classes.list}
-      draggedItemClassName={classes.dragged}
+      className="font-sans select-none grid grid-cols-3 gap-4 sm:gap-6"
+      draggedItemClassName="bg-blue-800"
       lockAxis={lockAxis}
     >
       {items.map((item) => (
         <SortableItem key={item}>
-          <div className={classes.item}>{item}</div>
+          <div className="flex justify-center items-center bg-blue-600 text-white h-[150px] cursor-grab text-xl select-none">
+            {item}
+          </div>
         </SortableItem>
       ))}
     </SortableList>
