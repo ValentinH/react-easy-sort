@@ -37,7 +37,7 @@
     "prepublishOnly": "yarn-or-npm build",
     "precommit": "lint-staged",
     "format": "prettier --write src/**/*.ts* stories/**/*.ts*",
-    "npm:publish": "np --contents=dist",
+    "npm:publish": "np --contents=dist --package-manager=yarn",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build -o ./docs"
   },
