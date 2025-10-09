@@ -47,7 +47,7 @@ npm install react-easy-sort --save
 
 ```js
 import SortableList, { SortableItem } from 'react-easy-sort'
-import { arrayMoveImmutable } from 'array-move'
+import arrayMove from 'array-move'
 
 const App = () => {
   const [items, setItems] = React.useState(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'])
